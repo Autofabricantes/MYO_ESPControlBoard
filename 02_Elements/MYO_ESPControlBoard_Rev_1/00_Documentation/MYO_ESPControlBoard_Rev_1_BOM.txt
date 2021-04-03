@@ -1,0 +1,58 @@
+Partlist
+
+Exported from MYO_ESPControlBoard_Rev_1.sch at 19/02/2021 21:35
+
+EAGLE Version 7.6.0 Copyright (c) 1988-2016 CadSoft
+
+Assembly variant: 
+
+Part      Value                                            Device                                           Package                        Library                           Sheet
+
+C_AS_0    22nF                                             C-USC0805K                                       C0805K                         adafruit                          1
+C_AS_1    22nF                                             C-USC0805K                                       C0805K                         adafruit                          1
+C_DR_0    100uF                                            C-USC0805K                                       C0805K                         adafruit                          1
+C_DR_1    100uF                                            C-USC0805K                                       C0805K                         adafruit                          1
+C_ESP_1   100uF                                            C-USC0805K                                       C0805K                         adafruit                          1
+C_ESP_2   100uF                                            C-USC0805K                                       C0805K                         adafruit                          1
+C_ESP_3   470pF                                            C-USC0805K                                       C0805K                         adafruit                          1
+C_VR_0    330nF                                            C-USC0805                                        C0805                          adafruit                          1
+C_VR_1    100nF                                            C-USC0805                                        C0805                          adafruit                          1
+C_VR_2    330nF                                            C-USC0805                                        C0805                          adafruit                          1
+C_VR_3    100nF                                            C-USC0805                                        C0805                          adafruit                          1
+D2        MBRA140                                          MBRA140                                          SMA-DIODE                      SparkFun-DiscreteSemi             1
+D3        MBRA140                                          MBRA140                                          SMA-DIODE                      SparkFun-DiscreteSemi             1
+J_PW                                                       M02-JST-2MM-SMT                                  JST-2-SMD                      SparkFun                          1
+LED_PW                                                     LEDSMT1206                                       1206                           adafruit                          1
+L_RGB_0                                                    WS2812B                                          WS2812B                        SparkFun-LED                      1
+MOTPOT_0  POLOLU_MOT_POT                                   POLOLU_MOT_POT                                   POLOLU_MOT_POT                 PololuMotors                      1
+MOTPOT_1  POLOLU_MOT_POT                                   POLOLU_MOT_POT                                   POLOLU_MOT_POT                 PololuMotors                      1
+Q_JTAG_0                                                   TRANSISTOR_NPNSOT23-3                            SOT23-3                        SparkFun                          1
+Q_JTAG_1                                                   TRANSISTOR_NPNSOT23-3                            SOT23-3                        SparkFun                          1
+R_AS_0    4k7Ohm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_AS_1    4k7Ohm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_AXL_0   12KOhm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_AXL_SCL 470Ohm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_AXL_SDA 470Ohm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_ESP0    5KOhm                                            R-US_M0805                                       M0805                          adafruit                          1
+R_ESP2    12KOhm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_ESP4    12KOhm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_JTAG_0  12KOhm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_JTAG_1  12KOhm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_POT_0   ???                                              R-US_M0805                                       M0805                          adafruit                          1
+R_POT_1   ???                                              R-US_M0805                                       M0805                          adafruit                          1
+R_PW      330Ohm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_SHUNT_0 0.039Ohm                                         R-US_M0805                                       M0805                          adafruit                          1
+R_SHUNT_1 0.039Ohm                                         R-US_M0805                                       M0805                          adafruit                          1
+R_SW_0    10kOhm                                           R-US_M0805                                       M0805                          adafruit                          1
+R_TX      470Ohm                                           R-US_M0805                                       M0805                          adafruit                          1
+SW_00     SWITCH-MOMENTARY-2TACTILE-SWITCH-SMD-RIGHT-ANGLE SWITCH-MOMENTARY-2TACTILE-SWITCH-SMD-RIGHT-ANGLE TACTILE_SWITCH-SMD-RIGHT-ANGLE SparkFun-Electromechanical        1
+SW_PW     TL36YO                                           TL36YO                                           TL3XYO                         switch                            1
+U_AS_0    ZXCT1022E5TA                                     ZXCT1022E5TA                                     SOT95P270X145-5N(SOT23-5)      ZXCT1022E5TA                      1
+U_AS_1    ZXCT1022E5TA                                     ZXCT1022E5TA                                     SOT95P270X145-5N(SOT23-5)      ZXCT1022E5TA                      1
+U_AXL     ADXL345                                          ADXL345                                          LGA14                          SparkFun                          1
+U_DR_0    VNH7100ASTR                                      VNH7100ASTR                                      SOIC127P600X175-16N            VNH7100ASTR                       1
+U_DR_1    VNH7100ASTR                                      VNH7100ASTR                                      SOIC127P600X175-16N            VNH7100ASTR                       1
+U_ESP     ESP-WROOM-03                                     ESP-WROOM-03                                     ESP-WROOM-03                   esp32                             1
+U_VR_0    MC78GENERICDT                                    MC78GENERICDT                                    DPAK-3                         _hhn_78xx_79xx_NCV78xx_d2pak_dpak 1
+U_VR_1    UA78M33DCY                                       UA78M33DCY                                       SOT223                         linear                            1
+X2        332-06                                           332-06                                           332-06                         con-garry                         1
