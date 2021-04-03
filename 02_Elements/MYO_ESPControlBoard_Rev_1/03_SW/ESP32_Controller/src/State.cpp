@@ -13,14 +13,14 @@ State::State(){
 
 int State::getCurrentState(){
 
-	//logger.debug("STATE::getCurrentState: %i\n", currentState);
+	logger.debug("STATE::getCurrentState: %d\n", currentState);
 
 	return currentState;
 }
 
 void State::setCurrentState(int state){
 
-	logger.info("STATE::setCurrentState: %i\n", state);
+	logger.info("STATE::setCurrentState: %d\n", state);
 
 	currentState = state;
 }

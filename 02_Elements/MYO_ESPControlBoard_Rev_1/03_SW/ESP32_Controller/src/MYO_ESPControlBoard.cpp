@@ -14,20 +14,26 @@ moving average of the rectified signal is computed to have the amplitude of the
 signal. This amplitude is compared to an activation threshold in order to move
 a servomotor. */
 
-#include <MyoControl.h>
+
 #include <MsTimer2.h>
-#include <Servo.h>
+#include <MyoControl.h>
+#include <ESP32Servo.h>
+
+/*
 
 MyoControl emgSens1(A0);
-MyoControl emgSens2(A1);
+MyoControl emgSens2(A0);
 
 Servo finger1;
 Servo finger2;
+
+
 
 void sampling() {
     emgSens1.sampling();
     emgSens2.sampling();
 }
+
 
 void setup() {
     pinMode(13, OUTPUT);
@@ -61,3 +67,5 @@ void loop() {
         digitalWrite(13, LOW);
     }
 }
+
+*/

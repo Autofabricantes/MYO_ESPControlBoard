@@ -3,16 +3,13 @@
 
 #include <inttypes.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
 #else
 	#include "WProgram.h"
 #endif
-
-extern "C" {
-  #include <avr/io.h>
-}
 
 #define LOG_LEVEL_NOOUTPUT 0
 #define LOG_LEVEL_ERRORS   1

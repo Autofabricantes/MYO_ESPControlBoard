@@ -1,4 +1,4 @@
-#include "Logging.h"
+#include <Logging.h>
 
 void Logging::init(int level, long baud){
     _level = constrain(level,LOG_LEVEL_NOOUTPUT,LOG_LEVEL_VERBOSE);
@@ -8,7 +8,6 @@ void Logging::init(int level, long baud){
 
 void Logging::error(char* msg, ...){
     if (LOG_LEVEL_ERRORS <= _level) {   
-		print ("ERROR: ",0);
         va_list args;
         va_start(args, msg);
         print(msg,args);

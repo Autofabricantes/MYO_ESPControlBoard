@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 #include "Logging.h"
 
 #ifndef CONSTANTS_H

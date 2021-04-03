@@ -1,3 +1,4 @@
+#include <PID_v1.h>
 #include "InputOutputUtils.h"
 
 /******************************************************************************/
@@ -14,7 +15,7 @@ void InputOutputUtils::initializeInputElements() {
 
 	//initializeRelativePotsValue();
 
-	int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
+	//int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
 
 	//logger.info("IOUTILS::initializeInputElements - Initial position for mittem %i\n", input);
 
@@ -282,7 +283,6 @@ void InputOutputUtils::initialFingerControlPID(int motorId,  int controlId){
 	logger.info("IOUTILS::initialFingerControlPID\n");
 
 	double setpoint, input, output;
-	PID pid;
 	int motorDir;
 
 	input = map(multiplexorRead(controlId), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
@@ -292,7 +292,7 @@ void InputOutputUtils::initialFingerControlPID(int motorId,  int controlId){
 	setpoint = 0;
 	logger.info("IOUTILS::initialFingerControlPID - initialization setpoint: %f\n", setpoint);
 
-	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
+	PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
 	motorDir = OPEN;
 
 	//Turn on the PID loop
@@ -368,12 +368,13 @@ void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId
     logger.info("IOUTILS::fingerControlPID\n");
 
     double setpoint, input, output;
-    PID pid;
 
     input = map(multiplexorRead(controlId), 0, 1023, 0, MOTOR_SPEED);
 	//input = multiplexorRead(controlId);
 
     logger.info("IOUTILS::fingerControlPID - input: %f\n", input);
+
+    PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
 
     if (motorDir == OPEN){
 
@@ -381,7 +382,7 @@ void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId
     	logger.info("IOUTILS::fingerControlPID - OPEN - final setpoint: %f\n", setpoint);
   
     	// Initialize PID
-    	PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
+    	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
 
 
     }else if (motorDir == CLOSE){
@@ -390,7 +391,7 @@ void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId
     	logger.info("IOUTILS::fingerControlPID - CLOSE  - final setpoint: %f\n", setpoint);
   
     	// Initialize PID
-    	PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, DIRECT);
+    	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, DIRECT);
     }
 
     //Turn on the PID loop
@@ -427,13 +428,13 @@ void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 	if (motorDir) { 
 		logger.info("IOUTILS::motorControl-forward direction-CLOSE\n");
 		digitalWrite(MOTOR_CONTROL_MATRIX[motorID][1], LOW);
-		analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], motorSpeed);
+		//analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], motorSpeed);
 	// Backward Direction --> OPEN --> 0
 	// 0 --> 1024 (increments)
 	} else {
 		logger.info("IOUTILS::motorControl-backward direction-OPEN\n");
 		digitalWrite(MOTOR_CONTROL_MATRIX[motorID][1], HIGH);
-		analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], (MOTOR_SPEED_MAX - motorSpeed));
+		//analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], (MOTOR_SPEED_MAX - motorSpeed));
 	}
   
 }

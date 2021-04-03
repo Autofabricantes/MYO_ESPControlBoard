@@ -23,7 +23,7 @@ void StateMachine::executeTransition(){
 
     //logger.debug("STM::executeTrans\n");
     
-    int currentState = state.getCurrentState();
+    //int currentState = state.getCurrentState();
 
     int transitionToPeform = transition.getTransitionToPerform(state);
 
