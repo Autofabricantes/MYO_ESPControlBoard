@@ -44,7 +44,7 @@
 /* TRANSITIONS                                                           */
 /*************************************************************************/
 // Transition Number
-//#define TRANSITIONS_NUMBER             6
+#define TRANSITIONS_NUMBER             6
 
 // Transition to inactive state
 #define INVALID_TRANSITION            -1
@@ -60,6 +60,8 @@
 #define TRANSITION_TO_CLOSE            4
 // Transition to fist state
 #define TRANSITION_TO_FIST             5
+//No identified movement intention
+#define TRANSITION_TO_NOTHING          6
 
 // Fingers position matrix from states definition
 // TODO: Considerar todos los posibles estados o eliminar estados 
@@ -67,13 +69,13 @@
 
 const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 
-    // MITTEN   FORE  THUMB
-    { OPEN,  OPEN,  OPEN  }, // STATE_INACTIVE
-    { OPEN,  OPEN,  OPEN  }, // STATE_IDLE
-    { OPEN,  CLOSE, CLOSE }, // STATE_TONGS
-    { CLOSE, OPEN,  CLOSE }, // STATE_FINGER
-    { CLOSE, CLOSE, OPEN  }, // STATE_CLOSE
-    { CLOSE, CLOSE, CLOSE }  // STATE_FIST
+    // THUMB  FORE   MITTEN
+    { OPEN,  OPEN,  OPEN  },  // STATE_INACTIVE
+    { OPEN,  OPEN,  OPEN  },  // STATE_IDLE
+    { CLOSE, CLOSE, OPEN  },  // STATE_TONGS
+    { CLOSE, OPEN,  CLOSE },  // STATE_FINGER
+    { OPEN,  CLOSE, CLOSE },  // STATE_CLOSE
+    { CLOSE, CLOSE, CLOSE }   // STATE_FIST
 };
 
 /*************************************************************************/
@@ -88,21 +90,60 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 #define MOTOR_SPEED      100
 
 
+/*************************************************************************/
+/* MULTIPLEXOR CONTROL                                                   */
+/*************************************************************************/
+// MYO_0
+#define CONTROL_INPUT_MYOWARE_SENSOR_1          0
+// MYO_1
+#define CONTROL_INPUT_MYOWARE_SENSOR_2          1
+// MPOT_0
+#define CONTROL_INPUT_POTENTIOMETER_MITTEN      2
+// CS_0
+#define CONTROL_INPUT_CURRENT_SENSOR_MITTEN     3
+// MPOT_1
+#define CONTROL_INPUT_POTENTIOMETER_FOREFINGER  4
+// CS_1
+#define CONTROL_INPUT_CURRENT_SENSOR_FOREFINGER 5
+// MPOT_2
+#define CONTROL_INPUT_POTENTIOMETER_THUMB       6
+// CS_2
+#define CONTROL_INPUT_CURRENT_SENSOR_THUMB      7
+
+/*************************************************************************/
+/*  PID FUNCTION                                                         */
+/*************************************************************************/
+// Tuning PID parameters
+//Initial Proportional Gain
+#define PID_KP 6
+//Initial Integral Gain
+#define PID_KI 0
+//Initial Differential Gain
+#define PID_KD 0
+// Defines how fast our PID loop runs
+#define PID_LIMITS 30
+
+
 /*****************************************************************************/
 /* PIN DESCRIPTION                                                           */
 /*****************************************************************************/
+
+/*---------------------------------------------------------------------------*/
+/* OUTPUT                                                                    */
+/*---------------------------------------------------------------------------*/ 
+
 
 // OUTPUT pin for LED RGB
 #define PIN_OUTPUT_LED_RGB                          13
 #define PIN_OUTPUT_LEDSTRIPE_RGB                    10
 
 // INPUT pin for tactile switch
-//#define PIN_INPUT_SWITH                            1
+#define PIN_INPUT_SWITH                            1
 // OUTPUT pin for bluetoothpe
-//#define PIN_OUTPUT_BLUETOOTH                      15                            
+#define PIN_OUTPUT_BLUETOOTH                      15                            
 
 // Accesory Board Detection
-//#define ACC_BRD
+#define ACC_BRD
 // Multiplexer Control Crazy Pionut Assignement A
 #define MUX_A                                       16 
 // Multiplexer Control Crazy Pionut Assignement B
@@ -145,37 +186,26 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] =
     {PIN_OUTPUT_MOTOR_THUMB_PWM, PIN_OUTPUT_MOTOR_THUMB}};   
 
 
-// Multiplexor Control Matrix
-// MYO_0
-#define CONTROL_INPUT_MYOWARE_SENSOR_1          0
-//MYO_1
-#define CONTROL_INPUT_MYOWARE_SENSOR_2          1
-// MPOT_0
-#define CONTROL_INPUT_POTENTIOMETER_MITTEN      2
-// CS_0
-#define CONTROL_INPUT_CURRENT_SENSOR_MITTEN     3
-// MPOT_1
-#define CONTROL_INPUT_POTENTIOMETER_FOREFINGER  4
-// CS_1
-#define CONTROL_INPUT_CURRENT_SENSOR_FOREFINGER 5
-// MPOT_2
-#define CONTROL_INPUT_POTENTIOMETER_THUMB       6
-// CS_2
-#define CONTROL_INPUT_CURRENT_SENSOR_THUMB      7
+
+#define GPIO4_MOT_EN_0   26
+#define GPIO18_MOT_A_0   30
+#define GPIO19_MOT_B_0   32
+#define GPIO27_M_POT_0   12
+
+#define GPIO5_MOT_EN_1   29
+#define GPIO25_MOT_A_1   10
+#define GPIO14_MOT_B_1   13
+#define GPIO32_MPOT_1     8 
+
+#define GPIO12_MSEN_0     9
+#define GPIO33_MSEN_1     6
+
+#define GPIO17_LED_RGB   28
+#define GPIO16_SW_0      27 
+#define GPIO21_SDA       33
+#define GPIO22_SCL       36
 
 
-// PID FUNCTION
-
-// Tuning PID parameters
-//Initial Proportional Gain
-#define PID_KP 1
-//Initial Integral Gain
-#define PID_KI 1
-//Initial Differential Gain
-#define PID_KD 1
-
-// Variable that determines how fast our PID loop runs
-#define PID_LIMITS 30
 
 
 #endif

@@ -8,26 +8,13 @@ class Transition{
 	private:
 
 	State currentState;
-
-    // Moves mitten to OPEN position if necesary
-    void openMitten();
-	// Moves mitten to CLOSE postion if necesary
-    void closeMitten();
-
-	// Moves forefinger to OPEN postion if necesary
-    void openForefinger();
-	// Moves forefinger to CLOSE postion if necesary
-    void closeForefinger();
-
-	// Moves thumb to OPEN postion if necesary
-    void openThumb();
-	// Moves thumb to CLOSE postion if necesary
-    void closeThumb();
+    InputOutputUtils inputOutputUtils;
 	
 	public:
 
 	// Constructor
     Transition();
+    Transition(InputOutputUtils inputOutputUtils);
     
 	// Resets state
     void reset();
