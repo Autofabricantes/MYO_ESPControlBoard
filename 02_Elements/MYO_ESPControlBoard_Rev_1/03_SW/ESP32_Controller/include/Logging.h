@@ -1,15 +1,11 @@
 #ifndef LOGGING_H
 #define LOGGING_H
 
+#include <Arduino.h>
+
 #include <inttypes.h>
 #include <stdarg.h>
 #include <stdio.h>
-
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "Arduino.h"
-#else
-	#include "WProgram.h"
-#endif
 
 #define LOG_LEVEL_NOOUTPUT 0
 #define LOG_LEVEL_ERRORS   1

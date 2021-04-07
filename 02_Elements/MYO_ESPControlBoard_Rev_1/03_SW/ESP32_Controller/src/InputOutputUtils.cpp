@@ -7,7 +7,7 @@
 
 void InputOutputUtils::initializeInputElements() {
 
-	//logger.debug("IOUTILS::initializeInputElements\n");
+	//logger.debug((char*)"IOUTILS::initializeInputElements\n");
 
 	relativePotMittenValue = 0;
 	relativePotForefingerValue = 0;
@@ -17,14 +17,14 @@ void InputOutputUtils::initializeInputElements() {
 
 	//int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
 
-	//logger.info("IOUTILS::initializeInputElements - Initial position for mittem %i\n", input);
+	//logger.info((char*)"IOUTILS::initializeInputElements - Initial position for mittem %i\n", input);
 
 
 }
 
 void InputOutputUtils::resetInputElements() {
 
-	logger.debug("IOUTILS::resetInput\n");
+	logger.debug((char *)"IOUTILS::resetInput\n");
 
 	relativePotMittenValue = 0;
 	relativePotForefingerValue = 0;
@@ -45,7 +45,7 @@ void InputOutputUtils::resetInputElements() {
 void InputOutputUtils::initializeOutputElements() {
 
 
-	logger.info("IOUTILS::initOutput\n");
+	logger.info((char*)"IOUTILS::initOutput\n");
 
 	// Initialize motors pinout
 	pinMode(MUX_A, OUTPUT);
@@ -64,7 +64,7 @@ void InputOutputUtils::initializeOutputElements() {
 
 void InputOutputUtils::resetOutputElements() {
 
-	//logger.debug("IOUTILS::resetOutput\n");
+	//logger.debug((char*)"IOUTILS::resetOutput\n");
 
 	initializeOutputElements();
 
@@ -82,7 +82,7 @@ int InputOutputUtils::getMittenPosition() {
 	// restaurar la posicion si es necesario.
 	int mittenPosition = currentState.getMittenPosition();
 
-	logger.info("IOUTILS::getMittenPosition: %i\n", mittenPosition);
+	logger.info((char*)"IOUTILS::getMittenPosition: %i\n", mittenPosition);
 
 	return mittenPosition;
 
@@ -95,7 +95,7 @@ int InputOutputUtils::getForefingerPosition() {
 	// restaurar la posicion si es necesario.
 	int forefingerPosition = currentState.getForefingerPosition();
 
-	//logger.debug("IOUTILS::getForefingerPos: %i\n", forefingerPosition);
+	//logger.debug((char*)"IOUTILS::getForefingerPos: %i\n", forefingerPosition);
 
 	return forefingerPosition;
 }
@@ -107,7 +107,7 @@ int InputOutputUtils::getThumbPosition() {
 	// restaurar la posicion si es necesario.
 	int thumbPosition = currentState.getThumbPosition();
 
-	//logger.debug("getThumbPos: %i\n", thumbPosition);
+	//logger.debug((char*)"getThumbPos: %i\n", thumbPosition);
 
 	return thumbPosition;
 
@@ -119,15 +119,15 @@ int InputOutputUtils::getThumbPosition() {
 
 int InputOutputUtils::getTransitionToPerform(State state) {
 
-	logger.debug("IOUTILS::getTrans\n");
+	logger.debug((char*)"IOUTILS::getTrans\n");
 
 	currentState = state;
 
 	// TOREMEMBER
 	//boolean activation1 = myowareSensorController1.activation();
-	//logger.info("IOUTILS::myowareSensorController1 - activation: %d\n", activation1);
+	//logger.info((char*)"IOUTILS::myowareSensorController1 - activation: %d\n", activation1);
 	//boolean activation2 = myowareSensorController2.activation();
-	//logger.info("IOUTILS::myowareSensorController2 - activation: %d\n", activation2);
+	//logger.info((char*)"IOUTILS::myowareSensorController2 - activation: %d\n", activation2);
 
 	int transitionTo = 0;
 
@@ -147,10 +147,10 @@ int InputOutputUtils::getTransitionToPerform(State state) {
 
 void InputOutputUtils::openMitten() {
 
-	//logger.debug("IOUTILS::openMitten\n");
+	//logger.debug((char*)"IOUTILS::openMitten\n");
 
     if(getMittenPosition() == CLOSE){
-		  logger.info("IOUTILS::openMitten-OPEN\n");
+		  logger.info((char*)"IOUTILS::openMitten-OPEN\n");
 		  fingerControl(MITTEN, OPEN, CONTROL_INPUT_POTENTIOMETER_MITTEN);
 	  }
 
@@ -158,40 +158,40 @@ void InputOutputUtils::openMitten() {
 
 void InputOutputUtils::closeMitten() {
 
-	logger.debug("IOUTILS::closeMitten\n");
+	logger.debug((char*)"IOUTILS::closeMitten\n");
 
 	if(getMittenPosition() == OPEN){
-		logger.info("IOUTILS::closeMitten-CLOSE\n");
+		logger.info((char*)"IOUTILS::closeMitten-CLOSE\n");
 		fingerControl(MITTEN, CLOSE, CONTROL_INPUT_POTENTIOMETER_MITTEN);
 	}
 }
 
 void InputOutputUtils::openForefinger() {
 
-	logger.debug("IOUTILS::openForefinger\n");
+	logger.debug((char*)"IOUTILS::openForefinger\n");
 
 	if(getForefingerPosition() == CLOSE){
-		logger.info("IOUTILS::openForefinger-OPEN\n");
+		logger.info((char*)"IOUTILS::openForefinger-OPEN\n");
 		fingerControl(FOREFINGER, OPEN, CONTROL_INPUT_POTENTIOMETER_FOREFINGER);
 	}
 }
 
 void InputOutputUtils::closeForefinger() {
 
-	//logger.debug("IOUTILS::closeForefinger\n");
+	//logger.debug((char*)"IOUTILS::closeForefinger\n");
 
 	if(getForefingerPosition() == OPEN){
-		logger.info("IOUTILS::closeForefinger-CLOSE\n");
+		logger.info((char*)"IOUTILS::closeForefinger-CLOSE\n");
 		fingerControl(FOREFINGER, CLOSE,CONTROL_INPUT_POTENTIOMETER_FOREFINGER);
 	}
 }
 
 void InputOutputUtils::openThumb() {
 
-	logger.info("IOUTILS::openThumb\n");
+	logger.info((char*)"IOUTILS::openThumb\n");
 
 	if(getThumbPosition() == CLOSE){
-		logger.info("IOUTILS::openThumb-OPEN\n");
+		logger.info((char*)"IOUTILS::openThumb-OPEN\n");
 		fingerControl(THUMB, OPEN, CONTROL_INPUT_POTENTIOMETER_THUMB);
 	}
 
@@ -199,10 +199,10 @@ void InputOutputUtils::openThumb() {
 
 void InputOutputUtils::closeThumb() {
 
-	//logger.info("IOUTILS::closeThumb\n");
+	//logger.info((char*)"IOUTILS::closeThumb\n");
 
 	if(getThumbPosition() == CLOSE){
-		logger.info("IOUTILS::closeThumb-CLOSE\n");
+		logger.info((char*)"IOUTILS::closeThumb-CLOSE\n");
 		fingerControl(THUMB,CLOSE,CONTROL_INPUT_POTENTIOMETER_THUMB);
 	}
 
@@ -252,11 +252,11 @@ void InputOutputUtils::initialFingerControl(int motorId,  int controlId){
 
 void InputOutputUtils::initialFingerControlTime(int motorId,  int controlId){
 
-	//logger.info("IOUTILS::initialFingerControlTime\n");
+	//logger.info((char*)"IOUTILS::initialFingerControlTime\n");
 
 	int initialPosition = multiplexorRead(controlId);
 	int finalPosition = initialPosition;
-	logger.info("IOUTILS::initialFingerControlTime-initialPos: %d\n", initialPosition);
+	logger.info((char*)"IOUTILS::initialFingerControlTime-initialPos: %d\n", initialPosition);
 
 	if(finalPosition < 200){
 		while(finalPosition < 200){
@@ -274,23 +274,23 @@ void InputOutputUtils::initialFingerControlTime(int motorId,  int controlId){
 		}
 	}
 
-	logger.info("IOUTILS::initialFingerControlTime-finalPos: %d\n", finalPosition);
+	logger.info((char*)"IOUTILS::initialFingerControlTime-finalPos: %d\n", finalPosition);
 
 }
 
 void InputOutputUtils::initialFingerControlPID(int motorId,  int controlId){
 
-	logger.info("IOUTILS::initialFingerControlPID\n");
+	logger.info((char*)"IOUTILS::initialFingerControlPID\n");
 
 	double setpoint, input, output;
 	int motorDir;
 
 	input = map(multiplexorRead(controlId), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
 	//input = multiplexorRead(controlId);
-	logger.info("IOUTILS::initialFingerControlPID - input: %f\n", input);
+	logger.info((char*)"IOUTILS::initialFingerControlPID - input: %f\n", input);
 
 	setpoint = 0;
-	logger.info("IOUTILS::initialFingerControlPID - initialization setpoint: %f\n", setpoint);
+	logger.info((char*)"IOUTILS::initialFingerControlPID - initialization setpoint: %f\n", setpoint);
 
 	PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
 	motorDir = OPEN;
@@ -310,12 +310,12 @@ void InputOutputUtils::initialFingerControlPID(int motorId,  int controlId){
 
 		input = map(multiplexorRead(controlId), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
 		//input = multiplexorRead(controlId);
-		logger.info("IOUTILS::initialFingerControlPID - loop input: %f\n", input);
-		logger.info("IOUTILS::initialFingerControlPID - loop output: %f\n", output);
+		logger.info((char*)"IOUTILS::initialFingerControlPID - loop input: %f\n", input);
+		logger.info((char*)"IOUTILS::initialFingerControlPID - loop output: %f\n", output);
 
 	}
 
-	logger.info("IOUTILS::initialFingerControlPID - Stop motor \n");
+	logger.info((char*)"IOUTILS::initialFingerControlPID - Stop motor \n");
 	motorControl(motorId, motorDir, MOTOR_SPEED_MIN);
 
 }
@@ -323,7 +323,7 @@ void InputOutputUtils::initialFingerControlPID(int motorId,  int controlId){
 
 void InputOutputUtils::fingerControl(int motorId, int motorDir, int controlId){
 
-	logger.info("IOUTILS::fingerControl\n");
+	logger.info((char*)"IOUTILS::fingerControl\n");
 
 	//fingerControlTime(motorId, motorDir, controlId);
 	fingerControlPID(motorId, motorDir, controlId);
@@ -332,16 +332,16 @@ void InputOutputUtils::fingerControl(int motorId, int motorDir, int controlId){
 
 void InputOutputUtils::fingerControlTime(int motorId, int motorDir, int controlId){
 
-	logger.info("IOUTILS::fingerControlTime\n");
+	logger.info((char*)"IOUTILS::fingerControlTime\n");
 
 	int initialPosition = multiplexorRead(controlId);
 	int finalPosition = initialPosition;
-	logger.info("IOUTILS::fingerControlTime-Initial pos: %d\n", initialPosition);
+	logger.info((char*)"IOUTILS::fingerControlTime-Initial pos: %d\n", initialPosition);
 
 	if((finalPosition < 200) || (finalPosition > 800)){
 
 		initialFingerControl(motorId, controlId);
-		logger.info("IOUTILS::fingerControlTime-Execute again finger control");
+		logger.info((char*)"IOUTILS::fingerControlTime-Execute again finger control");
 		fingerControl(motorId, motorDir, controlId);
 
 	}else if((finalPosition) > 200 && (motorDir == OPEN)){
@@ -359,27 +359,27 @@ void InputOutputUtils::fingerControlTime(int motorId, int motorDir, int controlI
 
 	}
 
-	logger.info("IOUTILS::fingerControlTime-Final pos: %d\n", finalPosition);
+	logger.info((char*)"IOUTILS::fingerControlTime-Final pos: %d\n", finalPosition);
       
 }
 
 void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId){
 
-    logger.info("IOUTILS::fingerControlPID\n");
+    logger.info((char*)"IOUTILS::fingerControlPID\n");
 
     double setpoint, input, output;
 
     input = map(multiplexorRead(controlId), 0, 1023, 0, MOTOR_SPEED);
 	//input = multiplexorRead(controlId);
 
-    logger.info("IOUTILS::fingerControlPID - input: %f\n", input);
+    logger.info((char*)"IOUTILS::fingerControlPID - input: %f\n", input);
 
     PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
 
     if (motorDir == OPEN){
 
     	setpoint = MOTOR_SPEED_MIN;
-    	logger.info("IOUTILS::fingerControlPID - OPEN - final setpoint: %f\n", setpoint);
+    	logger.info((char*)"IOUTILS::fingerControlPID - OPEN - final setpoint: %f\n", setpoint);
   
     	// Initialize PID
     	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
@@ -388,7 +388,7 @@ void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId
     }else if (motorDir == CLOSE){
 
     	setpoint = MOTOR_SPEED;
-    	logger.info("IOUTILS::fingerControlPID - CLOSE  - final setpoint: %f\n", setpoint);
+    	logger.info((char*)"IOUTILS::fingerControlPID - CLOSE  - final setpoint: %f\n", setpoint);
   
     	// Initialize PID
     	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, DIRECT);
@@ -407,13 +407,13 @@ void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId
       
     	motorControl(motorId, motorDir, round(output));
 
-      logger.info("IOUTILS::fingerControlPID - setpoint value: %f\n", setpoint);
-      logger.info("IOUTILS::fingerControlPID - input value:    %f\n", input);
-    	logger.info("IOUTILS::fingerControlPID - output value:   %f\n", output);
+      logger.info((char*)"IOUTILS::fingerControlPID - setpoint value: %f\n", setpoint);
+      logger.info((char*)"IOUTILS::fingerControlPID - input value:    %f\n", input);
+    	logger.info((char*)"IOUTILS::fingerControlPID - output value:   %f\n", output);
 
     }
 
-    logger.info("IOUTILS::fingerControlPID - Stopping motor\n");
+    logger.info((char*)"IOUTILS::fingerControlPID - Stopping motor\n");
     motorControl(motorId, motorDir, MOTOR_SPEED_MIN);
 
 }
@@ -421,18 +421,18 @@ void InputOutputUtils::fingerControlPID(int motorId, int motorDir, int controlId
 
 void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 
-   logger.info("IOUTILS::motorControl\n");
+   logger.info((char*)"IOUTILS::motorControl\n");
 
 	// Forward Direction --> CLOSE --> 1
    	// 1024 --> 0 (decrements)
 	if (motorDir) { 
-		logger.info("IOUTILS::motorControl-forward direction-CLOSE\n");
+		logger.info((char*)"IOUTILS::motorControl-forward direction-CLOSE\n");
 		digitalWrite(MOTOR_CONTROL_MATRIX[motorID][1], LOW);
 		//analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], motorSpeed);
 	// Backward Direction --> OPEN --> 0
 	// 0 --> 1024 (increments)
 	} else {
-		logger.info("IOUTILS::motorControl-backward direction-OPEN\n");
+		logger.info((char*)"IOUTILS::motorControl-backward direction-OPEN\n");
 		digitalWrite(MOTOR_CONTROL_MATRIX[motorID][1], HIGH);
 		//analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], (MOTOR_SPEED_MAX - motorSpeed));
 	}
@@ -447,7 +447,7 @@ int InputOutputUtils::multiplexorRead(int controlId){
 	// Lecture Sensors through 74HC4051 Multiplexer
 	// Entry channel selection for 74HC4051
 	
-	logger.info("IOUTILS::multiplexorRead-input[%i]\n", controlId);
+	logger.info((char*)"IOUTILS::multiplexorRead-input[%i]\n", controlId);
 
 	int cA = controlId & 0x01;   
 	int cB = (controlId>>1) & 0x01;     
@@ -462,7 +462,7 @@ int InputOutputUtils::multiplexorRead(int controlId){
 	if ((controlId == CONTROL_INPUT_POTENTIOMETER_MITTEN) || (controlId == CONTROL_INPUT_POTENTIOMETER_FOREFINGER) || (controlId == CONTROL_INPUT_POTENTIOMETER_THUMB))
 		readedValue = getRelativePotValue(controlId, readedValue);
 
-	logger.info("IOUTILS::multiplexorRead-output[%i]\n", readedValue);
+	logger.info((char*)"IOUTILS::multiplexorRead-output[%i]\n", readedValue);
 	
 	return readedValue;
 
@@ -475,7 +475,7 @@ int InputOutputUtils::initializePotMultiplexorRead(int controlId){
 	// Lecture Sensors through 74HC4051 Multiplexer
 	// Entry channel selection for 74HC4051
 
-	logger.info("IOUTILS::initializePotMultiplexorRead-input[%i]\n", controlId);
+	logger.info((char*)"IOUTILS::initializePotMultiplexorRead-input[%i]\n", controlId);
 
 	int cA = controlId & 0x01;
 	int cB = (controlId>>1) & 0x01;
@@ -487,7 +487,7 @@ int InputOutputUtils::initializePotMultiplexorRead(int controlId){
 
 	int readedValue = analogRead(MUX_MAIN);
 
-	logger.info("IOUTILS::initializePotMultiplexorRead-output[%i]\n", readedValue);
+	logger.info((char*)"IOUTILS::initializePotMultiplexorRead-output[%i]\n", readedValue);
 
 	return readedValue;
 

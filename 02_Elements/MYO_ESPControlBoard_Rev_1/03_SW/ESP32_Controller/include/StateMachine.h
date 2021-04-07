@@ -3,7 +3,6 @@
 
 #include "State.h"
 #include "Transition.h"
-#include "Test.h"
 
 class StateMachine{
 
@@ -11,10 +10,13 @@ class StateMachine{
 	
 	// Starts state machine
     void start();
-	// Execute a transition
-    void executeTransition();
-    void reset();
 
+    // Resets state machine
+	void reset();
+
+    // Execute a transition
+    void executeTransition();
+    
    private:
    
 	// State machine's state
@@ -22,8 +24,7 @@ class StateMachine{
 	// State machine's transition
     Transition transition;
 
-    // Test class
-    Test test;
+   
 
 };
 

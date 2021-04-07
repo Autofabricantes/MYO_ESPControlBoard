@@ -8,9 +8,14 @@ void Logging::init(int level, long baud){
 
 void Logging::error(char* msg, ...){
     if (LOG_LEVEL_ERRORS <= _level) {   
+
         va_list args;
         va_start(args, msg);
-        print(msg,args);
+
+        char str[80];
+        strcpy(str, "ERROR: " );
+        strcat(str, msg);
+        print(str,args);
     }
 }
 
@@ -19,7 +24,11 @@ void Logging::info(char* msg, ...){
     if (LOG_LEVEL_INFOS <= _level) {
         va_list args;
         va_start(args, msg);
-        print(msg,args);
+
+        char str[80];
+        strcpy(str, "INFOR: " );
+        strcat(str, msg);
+        print(str,args);
     }
 }
 
@@ -27,7 +36,11 @@ void Logging::debug(char* msg, ...){
     if (LOG_LEVEL_DEBUG <= _level) {
         va_list args;
         va_start(args, msg);
-        print(msg,args);
+
+        char str[80];
+        strcpy(str, "DEBUG: " );
+        strcat(str, msg);
+        print(str,args);
     }
 }
 
