@@ -1,24 +1,30 @@
 #include <PID_v1.h>
 #include "InputOutputUtils.h"
 
+// TODO3
+// Revision completa con código de raspy
+
 /******************************************************************************/
 /* INITIALIZATION INPUT METHODS                                               */
 /******************************************************************************/
 
+InputOutputUtils::InputOutputUtils(){}
+
 void InputOutputUtils::initializeInputElements() {
 
-	//logger.debug((char*)"IOUTILS::initializeInputElements\n");
+	logger.debug((char*)"IOUTILS::initializeInputElements\n");
 
+	// Multiplexor initialization
+	int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
+
+	// Potentiometers initialization
 	relativePotMittenValue = 0;
 	relativePotForefingerValue = 0;
 	relativePotThumbValue = 0;
+	
+	initializeRelativePotsValue();
 
-	//initializeRelativePotsValue();
-
-	//int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
-
-	//logger.info((char*)"IOUTILS::initializeInputElements - Initial position for mittem %i\n", input);
-
+	logger.info((char*)"IOUTILS::initializeInputElements - Initial position for mittem %i\n", input);
 
 }
 
@@ -26,16 +32,14 @@ void InputOutputUtils::resetInputElements() {
 
 	logger.debug((char *)"IOUTILS::resetInput\n");
 
+	// reset potentiometers
 	relativePotMittenValue = 0;
 	relativePotForefingerValue = 0;
 	relativePotThumbValue = 0;
+	
+	initializeRelativePotsValue();
 
-	//initializeRelativePotsValue();
-
-	// TOREMEMBER
-	//myowareSensorController1.calibration();
-	//myowareSensorController2.calibration();
-
+	
 }
 
 /******************************************************************************/
@@ -47,7 +51,7 @@ void InputOutputUtils::initializeOutputElements() {
 
 	logger.info((char*)"IOUTILS::initOutput\n");
 
-	// Initialize motors pinout
+	// Initialize multiplexor pinout
 	pinMode(MUX_A, OUTPUT);
 	pinMode(MUX_B, OUTPUT);
 	pinMode(MUX_C, OUTPUT);
@@ -60,14 +64,6 @@ void InputOutputUtils::initializeOutputElements() {
 	pinMode(PIN_OUTPUT_MOTOR_THUMB_PWM, OUTPUT);
 	pinMode(PIN_OUTPUT_MOTOR_THUMB, OUTPUT);
   
-}
-
-void InputOutputUtils::resetOutputElements() {
-
-	//logger.debug((char*)"IOUTILS::resetOutput\n");
-
-	initializeOutputElements();
-
 }
 
 
@@ -95,7 +91,7 @@ int InputOutputUtils::getForefingerPosition() {
 	// restaurar la posicion si es necesario.
 	int forefingerPosition = currentState.getForefingerPosition();
 
-	//logger.debug((char*)"IOUTILS::getForefingerPos: %i\n", forefingerPosition);
+	logger.debug((char*)"IOUTILS::getForefingerPos: %i\n", forefingerPosition);
 
 	return forefingerPosition;
 }
@@ -107,7 +103,7 @@ int InputOutputUtils::getThumbPosition() {
 	// restaurar la posicion si es necesario.
 	int thumbPosition = currentState.getThumbPosition();
 
-	//logger.debug((char*)"getThumbPos: %i\n", thumbPosition);
+	logger.debug((char*)"getThumbPos: %i\n", thumbPosition);
 
 	return thumbPosition;
 
@@ -123,22 +119,15 @@ int InputOutputUtils::getTransitionToPerform(State state) {
 
 	currentState = state;
 
-	// TOREMEMBER
-	//boolean activation1 = myowareSensorController1.activation();
-	//logger.info((char*)"IOUTILS::myowareSensorController1 - activation: %d\n", activation1);
-	//boolean activation2 = myowareSensorController2.activation();
-	//logger.info((char*)"IOUTILS::myowareSensorController2 - activation: %d\n", activation2);
-
 	int transitionTo = 0;
 
 	// Secuencial
-	// ROSA
 	static int i = 0;
 	transitionTo = ((i++)%STATES_NUMBER);
 	delay(10000);
 
 	// Menu
-	transitionTo = test.testInputForTransition();
+	//transitionTo = test.testInputForTransition();
 
 	return transitionTo;
 	
@@ -147,7 +136,7 @@ int InputOutputUtils::getTransitionToPerform(State state) {
 
 void InputOutputUtils::openMitten() {
 
-	//logger.debug((char*)"IOUTILS::openMitten\n");
+	logger.debug((char*)"IOUTILS::openMitten\n");
 
     if(getMittenPosition() == CLOSE){
 		  logger.info((char*)"IOUTILS::openMitten-OPEN\n");
@@ -178,7 +167,7 @@ void InputOutputUtils::openForefinger() {
 
 void InputOutputUtils::closeForefinger() {
 
-	//logger.debug((char*)"IOUTILS::closeForefinger\n");
+	logger.debug((char*)"IOUTILS::closeForefinger\n");
 
 	if(getForefingerPosition() == OPEN){
 		logger.info((char*)"IOUTILS::closeForefinger-CLOSE\n");
@@ -199,7 +188,7 @@ void InputOutputUtils::openThumb() {
 
 void InputOutputUtils::closeThumb() {
 
-	//logger.info((char*)"IOUTILS::closeThumb\n");
+	logger.info((char*)"IOUTILS::closeThumb\n");
 
 	if(getThumbPosition() == CLOSE){
 		logger.info((char*)"IOUTILS::closeThumb-CLOSE\n");
@@ -212,8 +201,6 @@ void InputOutputUtils::closeThumb() {
 /******************************************************************************/
 /* PCB CONTROLS                                                               */
 /******************************************************************************/
-
-
 
 void InputOutputUtils::initializeRelativePotsValue() {
 
@@ -252,7 +239,7 @@ void InputOutputUtils::initialFingerControl(int motorId,  int controlId){
 
 void InputOutputUtils::initialFingerControlTime(int motorId,  int controlId){
 
-	//logger.info((char*)"IOUTILS::initialFingerControlTime\n");
+	logger.info((char*)"IOUTILS::initialFingerControlTime\n");
 
 	int initialPosition = multiplexorRead(controlId);
 	int finalPosition = initialPosition;
@@ -492,6 +479,3 @@ int InputOutputUtils::initializePotMultiplexorRead(int controlId){
 	return readedValue;
 
 }
-
-
-InputOutputUtils inputOutputUtils = InputOutputUtils();

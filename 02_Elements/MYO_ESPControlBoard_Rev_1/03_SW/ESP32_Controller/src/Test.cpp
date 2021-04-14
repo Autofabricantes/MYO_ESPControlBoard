@@ -4,6 +4,9 @@
 /* PUBLIC METHODS                                                             */
 /******************************************************************************/
 
+// TODO 1
+// Probra que no hay referencias cruzadas ejecutando por comandos las transiciones
+
 int Test::testInputForTransition(){
 
 	int transition = 0;

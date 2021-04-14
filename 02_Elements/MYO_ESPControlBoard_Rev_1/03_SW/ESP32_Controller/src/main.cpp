@@ -1,37 +1,54 @@
 #include <Arduino.h>
-
 #include "WiFi.h"
 
+#include "Constants.h"
+#include "Logging.h"
+
+#include "InputOutputUtils.h"
+#include "StateMachine.h"
+
+int counter = 0;
+StateMachine stateMachine;
+InputOutputUtils inputOutputUtils;
 const char* ssid = "MASMOVIL_Ry5F";
 const char* password =  "Fx3up9dqPk2C";
 
-#define LED 2
-
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  pinMode(LED, OUTPUT);
+  
+	logger.init(LOGLEVEL, 115200);
+  delay(5000);
 
-  // Wifi connection
-  Serial.begin(115200);
+  logger.info((char*)"---> Setup");
+
+  // Start state machine
+  stateMachine = StateMachine();
+  stateMachine.start();
+
+  // Start control board
+  inputOutputUtils = InputOutputUtils();
+	inputOutputUtils.initializeInputElements();
+	inputOutputUtils.initializeOutputElements();
+
+	// Wifi connection
+  // TODO 4
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.println("Connecting to WiFi..");
+    logger.info((char*)"Setup --> Connecting to WiFi..");
   }
+  logger.info((char*)"Setup --> Connected to the WiFi network");
 
-  Serial.println("Connected to the WiFi network");
+  // Bluetooth initialization
+  // TODO 5
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(LED, HIGH);
-  Serial.println("LED is on");
-  delay(1000);
-  digitalWrite(LED, LOW);
-  Serial.println("LED is off");
-  delay(1000);
+
+  logger.info((char*)"\n---> Loop (%d)\n", counter);
+	counter++;
+	stateMachine.executeTransition();
+
 }
 

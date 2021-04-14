@@ -1,12 +1,9 @@
 #ifndef INPUT_OUTPUT_UTILS_H
 #define INPUT_OUTPUT_UTILS_H
 
-//#include <analogWrite.h>
-
 #include "Constants.h"
-#include "MyoControl.h"
+#include "MyoUtils.h"
 #include "State.h"
-#include "Test.h"
 
 class InputOutputUtils{
 
@@ -15,9 +12,6 @@ class InputOutputUtils{
 	int relativePotMittenValue;
 	int relativePotForefingerValue;
 	int relativePotThumbValue;
-
-	// TODELETE - Test Class
-	Test test;
 
 	// INPUT - Myoware Sensor Controllers
 	//MyoControl myowareSensorController1;
@@ -47,14 +41,16 @@ class InputOutputUtils{
     /* INPUT METHODS                                                         */
     /*************************************************************************/
 
+    InputOutputUtils();
+
+    // Initialization of INPUT sensors
+    void initializeInputElements();
+
 	void initializeRelativePotsValue();
 	int getRelativePotValue(int controlId, int currentValue);
 
 	// TODO - TAKE BACK TO PRIVATE
     void initialFingerControl(int motorId, int controlId);
-
-    // Initialization of INPUT sensors
-    void initializeInputElements();
 
     // Reset of INPUT sensors
     void resetInputElements();
@@ -117,7 +113,5 @@ class InputOutputUtils{
     void closeThumb();
 
 };
-
-extern InputOutputUtils inputOutputUtils;
 
 #endif

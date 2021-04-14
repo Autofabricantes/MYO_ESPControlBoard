@@ -1,7 +1,10 @@
-#include "Logging.h"
-
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
+
+#include "Logging.h"
+
+// TODO
+// Revision completa con código de raspy
 
 /*****************************************************************************/
 /* GENERAL                                                                   */
@@ -205,7 +208,19 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] =
 #define GPIO21_SDA       33
 #define GPIO22_SCL       36
 
+/*****************************************************************************/
+/* FUNCTION MODE                                                           */
+/*****************************************************************************/
+
+// Buttons control to test and initialize
+#define TEST_MODE          0
+// Myo operative control
+#define OPERATION_MODE    1
 
 
+/*****************************************************************************/
+/* Configuration constants                                                   */
+/*****************************************************************************/
+const int mode = TEST_MODE;
 
 #endif
