@@ -13,7 +13,7 @@ class Test{
   
   public:
 
-	int  testInputForTransition();
+	int  getKeyboardTransition();
 	void testInitializeLedStripe();
 	void testOutputWithLedStripe(int pos, int r, int g, int b);
 

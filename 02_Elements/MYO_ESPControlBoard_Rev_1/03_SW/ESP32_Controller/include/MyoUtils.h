@@ -5,10 +5,10 @@ class MyoUtils {
         
     public:
 
-        MyoUtils(int mode);  
+        MyoUtils();  
         void resetMyo();      
         void runMyo();
-        void getMyoTransition();
+        int getMyoTransition();
       
     private:
 

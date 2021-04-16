@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "MyoUtils.h"
 #include "State.h"
+#include "Test.h"
 
 class InputOutputUtils{
 
@@ -13,12 +14,14 @@ class InputOutputUtils{
 	int relativePotForefingerValue;
 	int relativePotThumbValue;
 
-	// INPUT - Myoware Sensor Controllers
-	//MyoControl myowareSensorController1;
-	//MyoControl myowareSensorController2;
-
 	// State to retrieve current finger's position
     State currentState;
+
+    // Myo Arm brand controller
+    MyoUtils myoUtils;
+
+    // Test controler
+    Test test;
     
     // Motor Control method
     void motorControl(int motorID, int motorDir, int motorSpeed);

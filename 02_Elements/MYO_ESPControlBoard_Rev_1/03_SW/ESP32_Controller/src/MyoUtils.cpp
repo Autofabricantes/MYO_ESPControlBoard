@@ -3,7 +3,7 @@
 // TODO 2
 // Myo Arm Band C++ Library 2
 
-MyoUtils::MyoUtils(int mode){
+MyoUtils::MyoUtils(){
 
     /*
         self.mode = mode
@@ -119,7 +119,9 @@ void MyoUtils::ledEmg(int* emg){
         */    
 }       
                             
-void MyoUtils::getMyoTransition(){
+int MyoUtils::getMyoTransition(){
+
+    int transition = 0;
         
     /*
         lastTransition = self.transition
@@ -149,6 +151,9 @@ void MyoUtils::getMyoTransition(){
         return self.transition
 
     */
+
+     return transition;
+
 }
     
                     
