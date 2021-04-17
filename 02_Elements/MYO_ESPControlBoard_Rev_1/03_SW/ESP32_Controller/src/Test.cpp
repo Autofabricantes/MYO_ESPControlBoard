@@ -19,13 +19,15 @@ int Test::getKeyboardTransition()
 	logger.info((char*)" (4) STATE_CLOSE\n");
 	logger.info((char*)" (5) STATE_FIST\n");
 		
-	logger.info((char*)"(10) EXIT");
+	logger.info((char*)"(10) EXIT\n");
 
-	// send data only when you receive data:
+	// send data only when you receive data
 	while(!Serial.available());
 
-	// read the incoming byte:
+	// read the incoming byte
 	transition = Serial.parseInt();
+
+	logger.info((char*)" Input value: %d\n", transition);
 
 	return transition;
   

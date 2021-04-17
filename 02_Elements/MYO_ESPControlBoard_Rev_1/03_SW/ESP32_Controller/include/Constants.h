@@ -154,9 +154,9 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 // Multiplexer Control Crazy Pionut Assignement C
 #define MUX_C                                       15 
 // Main Board Multiplexer Output
-#define MUX_MAIN                                     0
+#define MUX_MAIN                                     1
 // Acc Board Multiplexer Output 
-#define MUX_ACC                                      1 
+#define MUX_ACC                                      2 
 
 // INPUT pin for mitten related potentiometer
 #define PIN_OUTPUT_POTENTIOMETER_MITTEN              2
@@ -222,5 +222,13 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] =
 /* Configuration constants                                                   */
 /*****************************************************************************/
 const int mode = TEST_MODE;
+
+
+
+/*****************************************************************************/
+/* BLE Configuration                                                         */
+/*****************************************************************************/
+#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 #endif

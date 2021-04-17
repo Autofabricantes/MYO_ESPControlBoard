@@ -426,7 +426,8 @@ void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 
 int InputOutputUtils::multiplexorRead(int controlId){
 
-	int readedValue = analogRead(MUX_MAIN);
+	int readedValue = 0;
+	//analogRead(MUX_MAIN);
 
 
 /*

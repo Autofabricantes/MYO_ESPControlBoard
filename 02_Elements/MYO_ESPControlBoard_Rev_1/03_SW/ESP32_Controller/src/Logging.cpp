@@ -26,7 +26,7 @@ void Logging::info(char* msg, ...){
         va_start(args, msg);
 
         char str[80];
-        strcpy(str, "INFOR: " );
+        strcpy(str, "INFO: " );
         strcat(str, msg);
         print(str,args);
     }
