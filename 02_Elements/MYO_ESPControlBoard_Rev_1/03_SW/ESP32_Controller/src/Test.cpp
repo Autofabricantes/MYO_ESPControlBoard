@@ -4,21 +4,34 @@
 /* PUBLIC METHODS                                                             */
 /******************************************************************************/
 
-// TODO 1
-// Probra que no hay referencias cruzadas ejecutando por comandos las transiciones
 
-int Test::getKeyboardTransition()
-{
+Test::Test(){
+	logger.info((char*)"Init test........................\n");
+ 	
+	memorySW = false;
+
+	ledRGB = Adafruit_NeoPixel(1, PIN_LED_RGB, NEO_RGB + NEO_KHZ800);
+	ledRGB.begin();
+	// Moderately bright green color.
+ 	ledRGB.setPixelColor(0, 255, 0, 255); 
+	 // This sends the updated pixel color to the hardware.
+  	ledRGB.show(); 
+    // Delay for a period of time (in milliseconds).
+	delay(500); 
+
+}
+
+int Test::getKeyboardTransition(){
 	int transition = 0;
 	
 	logger.info((char*)"Transition to: \n");
-	logger.info((char*)" (0) STATE_INACTIVE\n");
-	logger.info((char*)" (1) STATE_IDLE\n");
-	logger.info((char*)" (2) STATE_TONGS\n");
-	logger.info((char*)" (3) STATE_FINGER\n");
-	logger.info((char*)" (4) STATE_CLOSE\n");
-	logger.info((char*)" (5) STATE_FIST\n");
-		
+	logger.info((char*)" (0) Transition to STATE_INACTIVE\n");
+	logger.info((char*)" (1) Transition to STATE_IDLE\n");
+	logger.info((char*)" (2) Transition to STATE_TONGS\n");
+	logger.info((char*)" (3) Transition to STATE_FINGER\n");
+	logger.info((char*)" (4) Transition to STATE_CLOSE\n");
+	logger.info((char*)" (5) Transition to STATE_FIST\n");
+
 	logger.info((char*)"(10) EXIT\n");
 
 	// send data only when you receive data
@@ -32,4 +45,28 @@ int Test::getKeyboardTransition()
 	return transition;
   
 }
+
+void Test::testingBoard(){
+	if(swActiveMomentary()){
+    	Serial.println("");
+    	Serial.println("PUSH!");
+    	ledRGB.setPixelColor(0, random(0,100), random(0,100), random(0,100)); // Moderately bright green color.
+  	}
+  	Serial.print(".");
+  	ledRGB.show(); // This sends the updated pixel color to the hardware.
+  	delay(10);
+}
+
+	
+bool Test::swActiveMomentary(){
+  bool newSW = digitalRead(PIN_SW_0);
+  if((memorySW)&&(!newSW)){
+    memorySW = newSW;
+    return true;
+  }else{
+    memorySW = newSW;
+    return false;
+  }
+}
+
 

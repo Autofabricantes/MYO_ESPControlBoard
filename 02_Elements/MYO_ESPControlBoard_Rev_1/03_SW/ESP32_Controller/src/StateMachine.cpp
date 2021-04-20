@@ -54,26 +54,26 @@ void StateMachine::executeTransition(){
         }
       break;
 
-      case TRANSITION_TO_FINGER:
-        if(state.getCurrentState() != STATE_INACTIVE){
-          transition.transitionToFinger();
-          state.setCurrentState(STATE_FINGER);
-        }
-      break;
+      // case TRANSITION_TO_FINGER:
+      //   if(state.getCurrentState() != STATE_INACTIVE){
+      //     transition.transitionToFinger();
+      //     state.setCurrentState(STATE_FINGER);
+      //   }
+      // break;
 
-      case TRANSITION_TO_CLOSE:
-        if(state.getCurrentState() != STATE_INACTIVE){
-          transition.transitionToClose();
-          state.setCurrentState(STATE_CLOSE);
-        }
-      break;
+      // case TRANSITION_TO_CLOSE:
+      //   if(state.getCurrentState() != STATE_INACTIVE){
+      //     transition.transitionToClose();
+      //     state.setCurrentState(STATE_CLOSE);
+      //   }
+      // break;
 
-      case TRANSITION_TO_FIST:
-        if(state.getCurrentState() != STATE_INACTIVE){
-          transition.transitionToFist();
-          state.setCurrentState(STATE_FIST);
-        }
-      break;
+      // case TRANSITION_TO_FIST:
+      //   if(state.getCurrentState() != STATE_INACTIVE){
+      //     transition.transitionToFist();
+      //     state.setCurrentState(STATE_FIST);
+      //   }
+      // break;
 
       default:
       break;

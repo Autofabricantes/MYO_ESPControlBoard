@@ -1,8 +1,8 @@
 #include <Arduino.h>
 
 // OTA Libraries
-#include <ESPAsyncWebServer.h>
-#include <AsyncElegantOTA.h>
+//#include <ESPAsyncWebServer.h>
+//#include <AsyncElegantOTA.h>
 
 // BLE Libraries
 #include <BLEDevice.h>
@@ -14,30 +14,30 @@
 #include "Logging.h"
 #include "InputOutputUtils.h"
 #include "StateMachine.h"
-#include "MyoUtils.h"
 
 int counter = 0;
 
 StateMachine stateMachine;
 InputOutputUtils inputOutputUtils;
 
-const char* ssid = "MASMOVIL_Ry5F";
-const char* password =  "Fx3up9dqPk2C";
-AsyncWebServer server(80);
+//AsyncWebServer server(80);
 
 // STATUS: Se puede cargar nuevo software en la ESP32 de manera remota (https://randomnerdtutorials.com/esp32-ota-over-the-air-arduino/)
-//         * 192.168.1.157/update
+//          * 192.168.1.157/update
  //         * Seleccionamos firmware.
  //         * Se sube el nuevo .bin generado.
  // TODO: 
  //         * Ver trazas de ejecución desde el mismo equipo (https://www.megunolink.com/articles/wireless/talk-esp32-over-wifi/)
  //         * Solucionar el problema del espacio. Ahora mismo no se puede cargar el webserver en la ESP32.
-void activateOTA();
+ //           https://community.home-assistant.io/t/esp32cam-ble-error-the-program-size-is-greater-than-maximum-allowed/158313
+ //           https://gitter.im/espressif/arduino-esp32?at=5e2f0581f196225bd66957fd
+// void activateOTA();
 
-// STATUS: Ahora se ve el servidor de bluetooth en el movil,
-//         tendremos que crear la conexión con la Myo Armband
-// https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
-void activateBLE();
+// STATUS:    Ahora se ve el servidor de bluetooth en el movil
+// TODO:      Tendremos que crear la conexión con la Myo Armband
+//            https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
+// void activateBLE();
+
 
 void setup() {
   
@@ -50,81 +50,85 @@ void setup() {
   //activateOTA();
   
   // Bluetooth activation
-  activateBLE();
+  //activateBLE();
 
   // Start state machine
-  stateMachine = StateMachine();
   stateMachine.start();
 
   // Start control board
-  inputOutputUtils = InputOutputUtils();
-	inputOutputUtils.initializeInputElements();
-	inputOutputUtils.initializeOutputElements();
+	inputOutputUtils.initIO();
 
 }
 
 void loop() {
 
-  AsyncElegantOTA.loop();
+  //AsyncElegantOTA.loop();
 
   logger.info((char*)"\n---> Loop (%d)\n", counter);
 	counter++;
 
-  stateMachine.executeTransition();
+  if (mode == TEST_MODE_BOARD)
+    inputOutputUtils.test.testingBoard();
+  else
+    stateMachine.executeTransition();
 
 }
 
-void activateOTA(){
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+// void activateOTA(){
 
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+//   WiFi.mode(WIFI_STA);
+//   WiFi.begin(SSID, PASSWORD);
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", "Hi! I am ESP32.");
-  });
+//   // Wait for connection
+//   while (WiFi.status() != WL_CONNECTED) {
+//     delay(500);
+//     Serial.print(".");
+//   }
+//   Serial.println("");
+//   Serial.print("Connected to ");
+//   Serial.println(SSID);
+//   Serial.print("IP address: ");
+//   Serial.println(WiFi.localIP());
 
-  // Start ElegantOTA
-  AsyncElegantOTA.begin(&server);   
-  server.begin();
-  Serial.println("HTTP server started");
+//   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+//     request->send(200, "text/plain", "Hi! I am ESP32.");
+//   });
 
-}
+//   // Start ElegantOTA
+//   AsyncElegantOTA.begin(&server);   
+//   server.begin();
+//   Serial.println("HTTP server started");
 
-void activateBLE(){
+// }
 
-  Serial.println("Starting BLE work!");
+// void activateBLE(){
 
-  BLEDevice::init("My ESP32");
-  BLEServer *pServer = BLEDevice::createServer();
-  BLEService *pService = pServer->createService(SERVICE_UUID);
-  BLECharacteristic *pCharacteristic = pService->createCharacteristic(
-                                         CHARACTERISTIC_UUID,
-                                         BLECharacteristic::PROPERTY_READ |
-                                         BLECharacteristic::PROPERTY_WRITE
-                                       );
+//   Serial.println("Starting BLE work!");
 
-  pCharacteristic->setValue("Hello World says Rosa");
-  pService->start();
-  // this still is working for backward compatibility
-  // BLEAdvertising *pAdvertising = pServer->getAdvertising();  
-  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(SERVICE_UUID);
-  pAdvertising->setScanResponse(true);
-  // functions that help with iPhone connections issue
-  pAdvertising->setMinPreferred(0x06);  
-  pAdvertising->setMinPreferred(0x12);
-  BLEDevice::startAdvertising();
-  Serial.println("Characteristic defined! Now you can read it in your phone!");
+//   BLEDevice::init("My ESP32");
+//   BLEServer *pServer = BLEDevice::createServer();
+//   BLEService *pService = pServer->createService(SERVICE_UUID);
+//   BLECharacteristic *pCharacteristic = pService->createCharacteristic(
+//                                          CHARACTERISTIC_UUID,
+//                                          BLECharacteristic::PROPERTY_READ |
+//                                          BLECharacteristic::PROPERTY_WRITE
+//                                        );
 
-}
+//   pCharacteristic->setValue("Hello World says Rosa");
+//   pService->start();
+//   // this still is working for backward compatibility
+//   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  
+//   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+//   pAdvertising->addServiceUUID(SERVICE_UUID);
+//   pAdvertising->setScanResponse(true);
+//   // functions that help with iPhone connections issue
+//   pAdvertising->setMinPreferred(0x06);  
+//   pAdvertising->setMinPreferred(0x12);
+//   BLEDevice::startAdvertising();
+//   Serial.println("Characteristic defined! Now you can read it in your phone!");
+
+// }
+
+
+

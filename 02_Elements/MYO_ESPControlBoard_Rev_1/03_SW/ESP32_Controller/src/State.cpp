@@ -33,14 +33,14 @@ void State::reset(){
 }
 
 
-int State::getMittenPosition(){
+// int State::getMittenPosition(){
 		
-	int fingerPosition   = FINGER_POSITION_MATRIX[currentState][MITTEN];
-	logger.debug((char*)"STATE::getMittenPos - State[%i] - Pos[%i]\n", currentState, fingerPosition);
+// 	int fingerPosition   = FINGER_POSITION_MATRIX[currentState][MITTEN];
+// 	logger.debug((char*)"STATE::getMittenPos - State[%i] - Pos[%i]\n", currentState, fingerPosition);
 
-	return fingerPosition;
+// 	return fingerPosition;
 
-}
+// }
 
 int State::getForefingerPosition(){
   

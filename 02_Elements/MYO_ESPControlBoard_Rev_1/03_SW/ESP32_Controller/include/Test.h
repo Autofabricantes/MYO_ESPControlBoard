@@ -1,22 +1,21 @@
 #ifndef TEST_H
 #define TEST_H
 
-// Library for Led Stripe WS2812B control
 #include <Adafruit_NeoPixel.h>
 #include "Constants.h"
 
 class Test{
 
   private:
+    Adafruit_NeoPixel ledRGB;
+    bool memorySW;
+    bool swActiveMomentary();
 
-  Adafruit_NeoPixel ledStripe;
-  
   public:
+    Test();
+	  int  getKeyboardTransition();
+    void testingBoard();
 
-	int  getKeyboardTransition();
-	void testInitializeLedStripe();
-	void testOutputWithLedStripe(int pos, int r, int g, int b);
-
-  };
+};
 
 #endif

@@ -3,12 +3,13 @@
 
 #include "Logging.h"
 
-// TODO
-// Revision completa con código de raspy
 
 /*****************************************************************************/
 /* GENERAL                                                                   */
 /*****************************************************************************/
+
+// TOREMEMEBER: Version inical con dos motores. Se elimina la manopla, 
+// que movería los tres dedos restantes de la mano
 
 // Identifies open position
 #define OPEN                  0
@@ -16,38 +17,50 @@
 #define CLOSE                 1
 
 // Number of finger elements
-#define FINGERS               3
+#define FINGERS               2
+
 // Identifies mitten fingers
-#define MITTEN                0
+#define THUMB                 0
 // Identifies forefinger finger 
 #define FOREFINGER            1
-// Identifies thumb finger
-#define THUMB                 2
+
+//Identifies thumb finger
+//#define MITTEM              2
 
 /*************************************************************************/
 /* STATES                                                                */
 /*************************************************************************/
+
+// TOREMEMEBER: Version inical con dos motores. Solamente tendremos los  
+// estados STATE_INACTIVE, STATE_IDLE, STATE_TONGS (equivalente a abierto/cerrado).
+
 // State Number
-#define STATES_NUMBER                  6
-// Inactive state (inactivo)
+#define STATES_NUMBER                  3
+
+// Para yuna versión inicial,
+// Inactive state 
 #define STATE_INACTIVE                 0
 // Resting/Initial state. Open hand
 #define STATE_IDLE                     1
 // Tongs state. Thumb + forefinger
 #define STATE_TONGS                    2
 // Finger state. Forefinger
-#define STATE_FINGER                   3
+// #define STATE_FINGER                3
 // Close state. Mitten + forefinger
-#define STATE_CLOSE                    4
+// #define STATE_CLOSE                 4
 // Fist state. Mitten + forefinger + thumb
-#define STATE_FIST                     5
+//#define STATE_FIST                   5
 
 
 /*************************************************************************/
 /* TRANSITIONS                                                           */
 /*************************************************************************/
+
+// TOREMEMEBER: Version inical con dos motores. Solamente transicionaremos  
+// entre STATE_INACTIVE, STATE_IDLE, STATE_TONGS (equivalente a abierto/cerrado).
+
 // Transition Number
-#define TRANSITIONS_NUMBER             6
+#define TRANSITIONS_NUMBER             3
 
 // Transition to inactive state
 #define INVALID_TRANSITION            -1
@@ -58,32 +71,31 @@
 // Transition to Tongs state
 #define TRANSITION_TO_TONGS            2
 // Transition to finger state
-#define TRANSITION_TO_FINGER           3
+// #define TRANSITION_TO_FINGER        3
 // Transition to close state
-#define TRANSITION_TO_CLOSE            4
+// #define TRANSITION_TO_CLOSE         4
 // Transition to fist state
-#define TRANSITION_TO_FIST             5
-//No identified movement intention
+// #define TRANSITION_TO_FIST          5
+// No identified movement intention
 #define TRANSITION_TO_NOTHING          6
 
 // Fingers position matrix from states definition
-// TODO: Considerar todos los posibles estados o eliminar estados 
-//       segun necesidades
-
+// TOREMEMBER: Adaptada a los estados y motores actuales
 const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 
-    // THUMB  FORE   MITTEN
-    { OPEN,  OPEN,  OPEN  },  // STATE_INACTIVE
-    { OPEN,  OPEN,  OPEN  },  // STATE_IDLE
-    { CLOSE, CLOSE, OPEN  },  // STATE_TONGS
-    { CLOSE, OPEN,  CLOSE },  // STATE_FINGER
-    { OPEN,  CLOSE, CLOSE },  // STATE_CLOSE
-    { CLOSE, CLOSE, CLOSE }   // STATE_FIST
+    //THUMB  FORE   
+    { OPEN,  OPEN  },  // STATE_INACTIVE
+    { OPEN,  OPEN  },  // STATE_IDLE
+    { CLOSE, CLOSE }   // STATE_TONGS
 };
 
 /*************************************************************************/
-/* MOTORS                                                                */
+/* MOTORS/FINGERS                                                        */
 /*************************************************************************/
+
+// RASPY
+//MOTOR_CTRL_MIN = 0  
+//MOTOR_CTRL_MAX = 4096 
 
 // Min Value for motors speed
 #define MOTOR_SPEED_MIN   0
@@ -94,34 +106,15 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 
 
 /*************************************************************************/
-/* MULTIPLEXOR CONTROL                                                   */
-/*************************************************************************/
-// MYO_0
-#define CONTROL_INPUT_MYOWARE_SENSOR_1          0
-// MYO_1
-#define CONTROL_INPUT_MYOWARE_SENSOR_2          1
-// MPOT_0
-#define CONTROL_INPUT_POTENTIOMETER_MITTEN      2
-// CS_0
-#define CONTROL_INPUT_CURRENT_SENSOR_MITTEN     3
-// MPOT_1
-#define CONTROL_INPUT_POTENTIOMETER_FOREFINGER  4
-// CS_1
-#define CONTROL_INPUT_CURRENT_SENSOR_FOREFINGER 5
-// MPOT_2
-#define CONTROL_INPUT_POTENTIOMETER_THUMB       6
-// CS_2
-#define CONTROL_INPUT_CURRENT_SENSOR_THUMB      7
-
-/*************************************************************************/
 /*  PID FUNCTION                                                         */
 /*************************************************************************/
 // Tuning PID parameters
-//Initial Proportional Gain
+
+// Initial Proportional Gain
 #define PID_KP 6
-//Initial Integral Gain
+// Initial Integral Gain
 #define PID_KI 0
-//Initial Differential Gain
+// Initial Differential Gain
 #define PID_KD 0
 // Defines how fast our PID loop runs
 #define PID_LIMITS 30
@@ -135,100 +128,78 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 /* OUTPUT                                                                    */
 /*---------------------------------------------------------------------------*/ 
 
-
 // OUTPUT pin for LED RGB
-#define PIN_OUTPUT_LED_RGB                          13
-#define PIN_OUTPUT_LEDSTRIPE_RGB                    10
+#define PIN_LED_RGB      17
 
-// INPUT pin for tactile switch
-#define PIN_INPUT_SWITH                            1
-// OUTPUT pin for bluetoothpe
-#define PIN_OUTPUT_BLUETOOTH                      15                            
+// THUMB MOTOR
+// PWM
+#define PIN_MOT_EN_0      4
+// INA
+#define PIN_MOT_A_0      18
+//INB
+#define PIN_MOT_B_0      19
+// POT
+#define PIN_MPOT_0       27
 
-// Accesory Board Detection
-#define ACC_BRD
-// Multiplexer Control Crazy Pionut Assignement A
-#define MUX_A                                       16 
-// Multiplexer Control Crazy Pionut Assignement B
-#define MUX_B                                       14 
-// Multiplexer Control Crazy Pionut Assignement C
-#define MUX_C                                       15 
-// Main Board Multiplexer Output
-#define MUX_MAIN                                     1
-// Acc Board Multiplexer Output 
-#define MUX_ACC                                      2 
+// FORE or MITTEN MOTOR
+// PWM
+#define PIN_MOT_EN_1      5
+// INA
+#define PIN_MOT_A_1      25
+// INB
+#define PIN_MOT_B_1      14
+// POT
+#define PIN_MPOT_1       32
 
-// INPUT pin for mitten related potentiometer
-#define PIN_OUTPUT_POTENTIOMETER_MITTEN              2
-// INPUT pin for forefinger related potentiometer
-#define PIN_OUTPUT_POTENTIOMETER_FOREFINGER          4
-// INPUT pin for thumb related potentiometer
-#define PIN_OUTPUT_POTENTIOMETER_THUMB               6
+const int FINGER_MOTORS_MATRIX[2][2] = {
+    { PIN_MOT_A_0, PIN_MOT_B_0},    // THUMB    
+    { PIN_MOT_A_1, PIN_MOT_B_1}     // FORE 
+};
 
-// INPUT pin for mitten related amperimeter
-#define PIN_OUTPUT_CURRENT_SENSOR_MITTEN             3
-// INPUT pin for forefinger related amperimeter
-#define PIN_OUTPUT_CURRENT_SENSOR_FOREFINGER         5
-// INPUT pin for thumb related amperimeter
-#define PIN_OUTPUT_CURRENT_SENSOR_THUMB              7
+// Sensors
+#define PIN_MSEN_0       12
+#define PIN_MSEN_1       33
 
-// OUTPUT pin for mitten related motor
-#define PIN_OUTPUT_MOTOR_MITTEN_PWM                  9
-#define PIN_OUTPUT_MOTOR_MITTEN                      8
-// OUTPUT pin for forefinger related motor
-#define PIN_OUTPUT_MOTOR_FOREFINGER_PWM              5
-#define PIN_OUTPUT_MOTOR_FOREFINGER                  7
-// OUTPUT pin for thumb related motor
-#define PIN_OUTPUT_MOTOR_THUMB_PWM                   3
-#define PIN_OUTPUT_MOTOR_THUMB                       4
+// Switch
+#define PIN_SW_0         16
 
-//Motor Control Matrix
-const int MOTOR_CONTROL_MATRIX[FINGERS][2] =
-   {{PIN_OUTPUT_MOTOR_MITTEN_PWM, PIN_OUTPUT_MOTOR_MITTEN},
-    {PIN_OUTPUT_MOTOR_FOREFINGER_PWM, PIN_OUTPUT_MOTOR_FOREFINGER},
-    {PIN_OUTPUT_MOTOR_THUMB_PWM, PIN_OUTPUT_MOTOR_THUMB}};   
+// I2C PWM CIRCUITS (motors activation)
+// https://en.wikipedia.org/wiki/I%C2%B2C
+// SDA: I2C Data
+#define PIN_SDA          21
+// SCL: I2C Clock
+#define PIN_SCL          22
 
-
-
-#define GPIO4_MOT_EN_0   26
-#define GPIO18_MOT_A_0   30
-#define GPIO19_MOT_B_0   32
-#define GPIO27_M_POT_0   12
-
-#define GPIO5_MOT_EN_1   29
-#define GPIO25_MOT_A_1   10
-#define GPIO14_MOT_B_1   13
-#define GPIO32_MPOT_1     8 
-
-#define GPIO12_MSEN_0     9
-#define GPIO33_MSEN_1     6
-
-#define GPIO17_LED_RGB   28
-#define GPIO16_SW_0      27 
-#define GPIO21_SDA       33
-#define GPIO22_SCL       36
 
 /*****************************************************************************/
-/* FUNCTION MODE                                                           */
+/* Configuration - FUNCTION MODE                                             */
 /*****************************************************************************/
 
 // Buttons control to test and initialize
-#define TEST_MODE          0
-// Myo operative control
-#define OPERATION_MODE    1
-
-
-/*****************************************************************************/
-/* Configuration constants                                                   */
-/*****************************************************************************/
-const int mode = TEST_MODE;
+#define TEST_MODE_TRANSITIONS   0
+#define TEST_MODE_BOARD         1
+//Myo operative control
+#define OPERATION_MODE          2
 
 
 
 /*****************************************************************************/
-/* BLE Configuration                                                         */
+/* Configuration - Constants                                                   */
+/*****************************************************************************/
+const int mode = TEST_MODE_TRANSITIONS;
+
+
+/*****************************************************************************/
+/* Configuration - BLE                                                        */
 /*****************************************************************************/
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+
+
+/*****************************************************************************/
+/* Configuration - WIFI                                                         */
+/*****************************************************************************/
+#define SSID                "MASMOVIL_Ry5F"
+#define PASSWORD            "Fx3up9dqPk2C"
 
 #endif

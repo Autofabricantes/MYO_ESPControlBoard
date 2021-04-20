@@ -30,7 +30,7 @@ void Transition::transitionToInactive(){
 
 	logger.debug((char*)"TRANS::trans2Inactive\n");
 
-	inputOutputUtils.openMitten();
+	//inputOutputUtils.openMitten();
 	inputOutputUtils.openForefinger();
 	inputOutputUtils.openThumb();
 }
@@ -41,20 +41,16 @@ void Transition::transitionToIdle(){
 
 	if(currentState.getCurrentState() == STATE_INACTIVE){
 
-		logger.info((char*)"IOUTILS::trans2Idle - Initialize mitten\n");
-		inputOutputUtils.initialFingerControl(MITTEN, CONTROL_INPUT_POTENTIOMETER_MITTEN);
-
-		logger.info((char*)"IOUTILS::trans2Idle-Init forefinger\n");
-		inputOutputUtils.initialFingerControl(FOREFINGER, CONTROL_INPUT_POTENTIOMETER_FOREFINGER);
-
 		logger.info((char*)"IOUTILS::trans2Idle-Init thumb\n");
-		inputOutputUtils.initialFingerControl(THUMB, CONTROL_INPUT_POTENTIOMETER_THUMB);
+		inputOutputUtils.initialFingerControl(THUMB, PIN_MPOT_0);
+		
+		logger.info((char*)"IOUTILS::trans2Idle-Init forefinger\n");
+		inputOutputUtils.initialFingerControl(FOREFINGER, PIN_MPOT_1);
 
 	}else{
 
-		inputOutputUtils.openMitten();
-		inputOutputUtils.openForefinger();
 		inputOutputUtils.openThumb();
+		inputOutputUtils.openForefinger();
 
 	}
 }
@@ -63,35 +59,35 @@ void Transition::transitionToTongs(){
 
 	logger.debug((char*)"TRANS::trans2Tongs\n");
 
-	inputOutputUtils.openMitten();
+	//inputOutputUtils.openMitten();
 	inputOutputUtils.closeForefinger();
 	inputOutputUtils.closeThumb();
 }
 
-void Transition::transitionToFinger(){
+// void Transition::transitionToFinger(){
 
-	logger.debug((char*)"TRANS::trans2Finger\n");
+// 	logger.debug((char*)"TRANS::trans2Finger\n");
 
-	inputOutputUtils.closeMitten();
-	inputOutputUtils.openForefinger();
-	inputOutputUtils.closeThumb();
-}
+// 	inputOutputUtils.closeMitten();
+// 	inputOutputUtils.openForefinger();
+// 	inputOutputUtils.closeThumb();
+// }
 
-void Transition::transitionToClose(){
+// void Transition::transitionToClose(){
 
-	logger.debug((char*)"TRANS::trans2Close\n");
+// 	logger.debug((char*)"TRANS::trans2Close\n");
 
-	inputOutputUtils.closeMitten();
-	inputOutputUtils.closeForefinger();
-	inputOutputUtils.openThumb();
-}
+// 	inputOutputUtils.closeMitten();
+// 	inputOutputUtils.closeForefinger();
+// 	inputOutputUtils.openThumb();
+// }
 
-void Transition::transitionToFist(){
+// void Transition::transitionToFist(){
 
-	logger.debug((char*)"TRANS::trans2Fist\n");
+// 	logger.debug((char*)"TRANS::trans2Fist\n");
 
-	inputOutputUtils.closeMitten();
-	inputOutputUtils.closeForefinger();
-	inputOutputUtils.closeThumb();
-}
+// 	inputOutputUtils.closeMitten();
+// 	inputOutputUtils.closeForefinger();
+// 	inputOutputUtils.closeThumb();
+// }
 

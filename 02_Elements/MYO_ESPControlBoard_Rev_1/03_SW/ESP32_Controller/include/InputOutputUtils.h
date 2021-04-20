@@ -6,9 +6,11 @@
 #include "State.h"
 #include "Test.h"
 
+
 class InputOutputUtils{
 
   private:
+
 
 	int relativePotMittenValue;
 	int relativePotForefingerValue;
@@ -20,9 +22,6 @@ class InputOutputUtils{
     // Myo Arm brand controller
     MyoUtils myoUtils;
 
-    // Test controler
-    Test test;
-    
     // Motor Control method
     void motorControl(int motorID, int motorDir, int motorSpeed);
 
@@ -45,18 +44,21 @@ class InputOutputUtils{
     /*************************************************************************/
 
     InputOutputUtils();
+    
+    // Test controller
+    Test test;
 
     // Initialization of INPUT sensors
-    void initializeInputElements();
+    void initIO();
+        // Reset INPUT/OUTPUT elements
+    void resetIO();
 
-	void initializeRelativePotsValue();
 	int getRelativePotValue(int controlId, int currentValue);
 
 	// TODO - TAKE BACK TO PRIVATE
     void initialFingerControl(int motorId, int controlId);
 
-    // Reset of INPUT sensors
-    void resetInputElements();
+
 
 	// Identifies the state selected by user from input elements feedback
     // An interpretation and treatment of readed data from sensors will be  
@@ -70,7 +72,7 @@ class InputOutputUtils{
 	// TODO: Two solutions for fingers position
     //  - Detect where the finger is
     //  - Trust where the state says we are
-    int getMittenPosition();
+    //int getMittenPosition();
 
     // Detects forefinger position from output elements feedback
     // returns: OPEN|CLOSE
@@ -91,17 +93,11 @@ class InputOutputUtils{
     /* OUTPUT METHODS                                                         */
     /**************************************************************************/
 
-    // Initialization of OUTPUT elements
-    void initializeOutputElements();
-
-    // Reset of OUTPUT elements
-    void resetOutputElements();
-
     // Moves mitten to OPEN postion if necesary
-    void openMitten();
+    //void openMitten();
 
     // Moves mitten to CLOSE postion if necesary
-    void closeMitten();
+    //void closeMitten();
 
     // Moves forefinger to OPEN postion if necesary
     void openForefinger();
@@ -109,7 +105,7 @@ class InputOutputUtils{
     // Moves forefinger to CLOSE postion if necesary
     void closeForefinger();
 
-       // Moves thumb to OPEN postion if necesary
+    // Moves thumb to OPEN postion if necesary
     void openThumb();
 
     // Moves mitten to CLOSE postion if necesary

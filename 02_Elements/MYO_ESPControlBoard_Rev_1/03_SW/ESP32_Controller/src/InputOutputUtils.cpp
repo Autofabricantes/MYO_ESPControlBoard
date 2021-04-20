@@ -10,66 +10,61 @@
 
 InputOutputUtils::InputOutputUtils(){}
 
-void InputOutputUtils::initializeInputElements() {
+void InputOutputUtils::initIO() {
 
 	logger.debug((char*)"IOUTILS::initializeInputElements\n");
 
+	// Initialize switch pinout
+	pinMode(PIN_SW_0, INPUT);
+
+	// Initialize motors pinout	
+	pinMode(PIN_MOT_EN_0,  OUTPUT);
+	pinMode(PIN_MOT_A_0,   OUTPUT);
+	pinMode(PIN_MOT_B_0,   OUTPUT);
+	pinMode(PIN_MPOT_0,    OUTPUT);
+
+	pinMode(PIN_MOT_EN_1,  OUTPUT);
+	pinMode(PIN_MOT_A_1,   OUTPUT);
+	pinMode(PIN_MOT_B_1,   OUTPUT);
+	pinMode(PIN_MPOT_1,    OUTPUT);
+
+	pinMode(PIN_MOT_EN_0,  OUTPUT);
+ 	pinMode(PIN_MOT_A_0,   OUTPUT);
+ 	pinMode(PIN_MOT_B_0,   OUTPUT);
+  	pinMode(PIN_MOT_EN_1,  OUTPUT);
+  	pinMode(PIN_MOT_A_1,   OUTPUT);
+  	pinMode(PIN_MOT_B_1,   OUTPUT);
+  
+
 	// Multiplexor initialization
-	int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
-
+	// int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
+	// TRASPY - NO se si tengo un ADC o un MUX
+	// Initialize ADC
+	// TODO - Here or in fingerControl?
+	// adc = MCP3008(clk=GPIO_BUS_SCLK, cs=GPIO_BUS_ADC_CS, miso=GPIO_BUS_MISO, mosi=GPIO_BUS_MOSI)
+	
 	// Potentiometers initialization
-	relativePotMittenValue = 0;
-	relativePotForefingerValue = 0;
-	relativePotThumbValue = 0;
-	initializeRelativePotsValue();
+	relativePotThumbValue = initializePotMultiplexorRead(PIN_MPOT_0);
+	relativePotForefingerValue = initializePotMultiplexorRead(PIN_MPOT_1);
 
-	// Runs myo controller
-	MyoUtils myoUtils = MyoUtils();
-	myoUtils.runMyo();
+	// Myo connection
+	myoUtils.connect();
 
-	logger.info((char*)"IOUTILS::initializeInputElements - Initial position for mittem %i\n", input);
+	// Init testing class
+	test = Test();
 
 }
 
-void InputOutputUtils::resetInputElements() {
+// Posiblemente pueda reutilizar INIT pero mantenemos esta por si necesito activar solo algunos elementos.
+void InputOutputUtils::resetIO() {
 
-	logger.debug((char *)"IOUTILS::resetInput\n");
+	logger.debug((char *)"IOUTILS::resetIO\n");
 
-	// reset potentiometers
-	relativePotMittenValue = 0;
-	relativePotForefingerValue = 0;
-	relativePotThumbValue = 0;
-	
-	initializeRelativePotsValue();
-
-	myoUtils.resetMyo();
+	// Reset potentiometers
+	relativePotThumbValue = initializePotMultiplexorRead(PIN_MPOT_0);
+	relativePotForefingerValue = initializePotMultiplexorRead(PIN_MPOT_1);
 	
 }
-
-/******************************************************************************/
-/* INITIALIZATION OUTPUT METHODS                                              */
-/******************************************************************************/
-
-void InputOutputUtils::initializeOutputElements() {
-
-
-	logger.info((char*)"IOUTILS::initOutput\n");
-
-	// Initialize multiplexor pinout
-	pinMode(MUX_A, OUTPUT);
-	pinMode(MUX_B, OUTPUT);
-	pinMode(MUX_C, OUTPUT);
-  
-	// Initialize motors pinout
-	pinMode(PIN_OUTPUT_MOTOR_MITTEN_PWM, OUTPUT);
-	pinMode(PIN_OUTPUT_MOTOR_MITTEN, OUTPUT);
-	pinMode(PIN_OUTPUT_MOTOR_FOREFINGER_PWM, OUTPUT);
-	pinMode(PIN_OUTPUT_MOTOR_FOREFINGER, OUTPUT);
-	pinMode(PIN_OUTPUT_MOTOR_THUMB_PWM, OUTPUT);
-	pinMode(PIN_OUTPUT_MOTOR_THUMB, OUTPUT);
-  
-}
-
 
 /******************************************************************************/
 /* FINGERS POSITION                                                           */
@@ -80,14 +75,14 @@ void InputOutputUtils::initializeOutputElements() {
 // TODO: What happens if finger position is diferent to current position?
 // Tenedremos que revisar en que posicion se encuentar el dedo realmente para
 // restaurar la posicion si es necesario.
-int InputOutputUtils::getMittenPosition() {
+// int InputOutputUtils::getMittenPosition() {
 
-	int mittenPosition = currentState.getMittenPosition();
-	logger.info((char*)"IOUTILS::getMittenPosition: %i\n", mittenPosition);
+// 	int mittenPosition = currentState.getMittenPosition();
+// 	logger.info((char*)"IOUTILS::getMittenPosition: %i\n", mittenPosition);
 
-	return mittenPosition;
+// 	return mittenPosition;
 
-}
+// }
 
 int InputOutputUtils::getForefingerPosition() {
 
@@ -118,7 +113,7 @@ int InputOutputUtils::getTransitionToPerform(State state) {
 
 	int transitionTo = 0;
 
-	if (mode == TEST_MODE)
+	if (mode == TEST_MODE_TRANSITIONS)
 		transitionTo = test.getKeyboardTransition();
 	else
 		transitionTo = myoUtils.getMyoTransition();
@@ -128,26 +123,26 @@ int InputOutputUtils::getTransitionToPerform(State state) {
 }
 
 // OUTPUT ACTION
-void InputOutputUtils::openMitten() {
+// void InputOutputUtils::openMitten() {
 
-	logger.debug((char*)"IOUTILS::openMitten\n");
+// 	logger.debug((char*)"IOUTILS::openMitten\n");
 
-    if(getMittenPosition() == CLOSE){
-		  logger.info((char*)"IOUTILS::openMitten-OPEN\n");
-		  fingerControl(MITTEN, OPEN, CONTROL_INPUT_POTENTIOMETER_MITTEN);
-	  }
+//     if(getMittenPosition() == CLOSE){
+// 		  logger.info((char*)"IOUTILS::openMitten-OPEN\n");
+// 		  fingerControl(MITTEN, OPEN, CONTROL_INPUT_POTENTIOMETER_MITTEN);
+// 	  }
 
-}
+// }
 
-void InputOutputUtils::closeMitten() {
+// void InputOutputUtils::closeMitten() {
 
-	logger.debug((char*)"IOUTILS::closeMitten\n");
+// 	logger.debug((char*)"IOUTILS::closeMitten\n");
 
-	if(getMittenPosition() == OPEN){
-		logger.info((char*)"IOUTILS::closeMitten-CLOSE\n");
-		fingerControl(MITTEN, CLOSE, CONTROL_INPUT_POTENTIOMETER_MITTEN);
-	}
-}
+// 	if(getMittenPosition() == OPEN){
+// 		logger.info((char*)"IOUTILS::closeMitten-CLOSE\n");
+// 		fingerControl(MITTEN, CLOSE, CONTROL_INPUT_POTENTIOMETER_MITTEN);
+// 	}
+// }
 
 void InputOutputUtils::openForefinger() {
 
@@ -155,7 +150,7 @@ void InputOutputUtils::openForefinger() {
 
 	if(getForefingerPosition() == CLOSE){
 		logger.info((char*)"IOUTILS::openForefinger-OPEN\n");
-		fingerControl(FOREFINGER, OPEN, CONTROL_INPUT_POTENTIOMETER_FOREFINGER);
+		fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
 	}
 }
 
@@ -165,7 +160,7 @@ void InputOutputUtils::closeForefinger() {
 
 	if(getForefingerPosition() == OPEN){
 		logger.info((char*)"IOUTILS::closeForefinger-CLOSE\n");
-		fingerControl(FOREFINGER, CLOSE,CONTROL_INPUT_POTENTIOMETER_FOREFINGER);
+		fingerControl(FOREFINGER, CLOSE,PIN_MPOT_1);
 	}
 }
 
@@ -175,7 +170,7 @@ void InputOutputUtils::openThumb() {
 
 	if(getThumbPosition() == CLOSE){
 		logger.info((char*)"IOUTILS::openThumb-OPEN\n");
-		fingerControl(THUMB, OPEN, CONTROL_INPUT_POTENTIOMETER_THUMB);
+		fingerControl(THUMB, OPEN, PIN_MPOT_1);
 	}
 
 }
@@ -186,8 +181,8 @@ void InputOutputUtils::closeThumb() {
 
 	if(getThumbPosition() == CLOSE){
 		logger.info((char*)"IOUTILS::closeThumb-CLOSE\n");
-	if (mode != TEST_MODE)
-		fingerControl(THUMB,CLOSE,CONTROL_INPUT_POTENTIOMETER_THUMB);
+	if (mode != TEST_MODE_TRANSITIONS)
+		fingerControl(THUMB,CLOSE, PIN_MPOT_0);
 	}
 }
 
@@ -254,16 +249,6 @@ void InputOutputUtils::fingerControl(int motorId, int motorDir, int controlId){
 
 }
 
-
-void InputOutputUtils::initializeRelativePotsValue() {
-
-/*
-	relativePotMittenValue = initializePotMultiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN);
-	relativePotForefingerValue = initializePotMultiplexorRead(CONTROL_INPUT_POTENTIOMETER_FOREFINGER);
-	relativePotThumbValue = initializePotMultiplexorRead(CONTROL_INPUT_POTENTIOMETER_THUMB);
-*/
-
-}
 
 
 int InputOutputUtils::getRelativePotValue(int controlId, int currentValue) {
@@ -460,8 +445,12 @@ int InputOutputUtils::multiplexorRead(int controlId){
 }
 
 
-/*
 int InputOutputUtils::initializePotMultiplexorRead(int controlId){
+
+	int readedValue = 0;
+	//analogRead(MUX_MAIN);
+
+	/*
 
 	// Main Multiplexer (vs Acc Multiplexer)
 
@@ -482,8 +471,10 @@ int InputOutputUtils::initializePotMultiplexorRead(int controlId){
 
 	logger.info((char*)"IOUTILS::initializePotMultiplexorRead-output[%i]\n", readedValue);
 
+	*/
+
 	return readedValue;
 
 }
 
-*/
+

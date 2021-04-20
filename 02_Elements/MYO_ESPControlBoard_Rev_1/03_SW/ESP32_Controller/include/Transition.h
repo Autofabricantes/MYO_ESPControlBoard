@@ -29,11 +29,11 @@ class Transition{
 	// Goes to tongs state depending on the current one
     void transitionToTongs();
 	// Goes to finger state depending on the current one
-    void transitionToFinger();
+    //void transitionToFinger();
 	// Goes to close state depending on the current one
-    void transitionToClose();
+    //void transitionToClose();
 	// Goes to fist state depending on the current one
-    void transitionToFist();
+    //void transitionToFist();
 
   };
 
