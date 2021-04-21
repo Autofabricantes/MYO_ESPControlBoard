@@ -1,8 +1,6 @@
 #include <PID_v1.h>
 #include "InputOutputUtils.h"
 
-// TODO3
-// Revision completa con código de raspy
 
 /******************************************************************************/
 /* INITIALIZATION INPUT METHODS                                               */
@@ -27,25 +25,10 @@ void InputOutputUtils::initIO() {
 	pinMode(PIN_MOT_A_1,   OUTPUT);
 	pinMode(PIN_MOT_B_1,   OUTPUT);
 	pinMode(PIN_MPOT_1,    OUTPUT);
-
-	pinMode(PIN_MOT_EN_0,  OUTPUT);
- 	pinMode(PIN_MOT_A_0,   OUTPUT);
- 	pinMode(PIN_MOT_B_0,   OUTPUT);
-  	pinMode(PIN_MOT_EN_1,  OUTPUT);
-  	pinMode(PIN_MOT_A_1,   OUTPUT);
-  	pinMode(PIN_MOT_B_1,   OUTPUT);
-  
-
-	// Multiplexor initialization
-	// int input = map(multiplexorRead(CONTROL_INPUT_POTENTIOMETER_MITTEN), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
-	// TRASPY - NO se si tengo un ADC o un MUX
-	// Initialize ADC
-	// TODO - Here or in fingerControl?
-	// adc = MCP3008(clk=GPIO_BUS_SCLK, cs=GPIO_BUS_ADC_CS, miso=GPIO_BUS_MISO, mosi=GPIO_BUS_MOSI)
 	
 	// Potentiometers initialization
-	relativePotThumbValue = initializePotMultiplexorRead(PIN_MPOT_0);
-	relativePotForefingerValue = initializePotMultiplexorRead(PIN_MPOT_1);
+	initPotValue(PIN_MPOT_0);
+	initPotValue(PIN_MPOT_1);
 
 	// Myo connection
 	myoUtils.connect();
@@ -61,29 +44,26 @@ void InputOutputUtils::resetIO() {
 	logger.debug((char *)"IOUTILS::resetIO\n");
 
 	// Reset potentiometers
-	relativePotThumbValue = initializePotMultiplexorRead(PIN_MPOT_0);
-	relativePotForefingerValue = initializePotMultiplexorRead(PIN_MPOT_1);
+	initPotValue(PIN_MPOT_0);
+	initPotValue(PIN_MPOT_1);
 	
 }
 
 /******************************************************************************/
 /* FINGERS POSITION                                                           */
-/******************************************************************************/
-// TODO: Two solutions for fingers position
-//	 - Detect where the finger is
-//	 - Trust where the state says we are		
-// TODO: What happens if finger position is diferent to current position?
+/******************************************************************************/	
+// TODO
+// Ahora mismo simplemente recuperamos la posición de los dedos de la máquina 
+// de estados.
 // Tenedremos que revisar en que posicion se encuentar el dedo realmente para
 // restaurar la posicion si es necesario.
-// int InputOutputUtils::getMittenPosition() {
+int InputOutputUtils::getThumbPosition() {
 
-// 	int mittenPosition = currentState.getMittenPosition();
-// 	logger.info((char*)"IOUTILS::getMittenPosition: %i\n", mittenPosition);
+	int thumbPosition = currentState.getThumbPosition();
+	logger.debug((char*)"IOUTILS::getThumbPos: %i\n", thumbPosition);
 
-// 	return mittenPosition;
-
-// }
-
+	return thumbPosition;
+}
 int InputOutputUtils::getForefingerPosition() {
 
 	int forefingerPosition = currentState.getForefingerPosition();
@@ -92,19 +72,13 @@ int InputOutputUtils::getForefingerPosition() {
 	return forefingerPosition;
 }
 
-int InputOutputUtils::getThumbPosition() {
 
-	int thumbPosition = currentState.getThumbPosition();
-	logger.debug((char*)"getThumbPos: %i\n", thumbPosition);
-
-	return thumbPosition;
-}
 
 /******************************************************************************/
 /* TRANSITIONS                                                                */
 /******************************************************************************/
 
-// INPUT STATE
+// INPUT: Action received
 int InputOutputUtils::getTransitionToPerform(State state) {
 
 	logger.debug((char*)"IOUTILS::getTransitionToPerform\n");
@@ -122,47 +96,7 @@ int InputOutputUtils::getTransitionToPerform(State state) {
 	
 }
 
-// OUTPUT ACTION
-// void InputOutputUtils::openMitten() {
-
-// 	logger.debug((char*)"IOUTILS::openMitten\n");
-
-//     if(getMittenPosition() == CLOSE){
-// 		  logger.info((char*)"IOUTILS::openMitten-OPEN\n");
-// 		  fingerControl(MITTEN, OPEN, CONTROL_INPUT_POTENTIOMETER_MITTEN);
-// 	  }
-
-// }
-
-// void InputOutputUtils::closeMitten() {
-
-// 	logger.debug((char*)"IOUTILS::closeMitten\n");
-
-// 	if(getMittenPosition() == OPEN){
-// 		logger.info((char*)"IOUTILS::closeMitten-CLOSE\n");
-// 		fingerControl(MITTEN, CLOSE, CONTROL_INPUT_POTENTIOMETER_MITTEN);
-// 	}
-// }
-
-void InputOutputUtils::openForefinger() {
-
-	logger.debug((char*)"IOUTILS::openForefinger\n");
-
-	if(getForefingerPosition() == CLOSE){
-		logger.info((char*)"IOUTILS::openForefinger-OPEN\n");
-		fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
-	}
-}
-
-void InputOutputUtils::closeForefinger() {
-
-	logger.debug((char*)"IOUTILS::closeForefinger\n");
-
-	if(getForefingerPosition() == OPEN){
-		logger.info((char*)"IOUTILS::closeForefinger-CLOSE\n");
-		fingerControl(FOREFINGER, CLOSE,PIN_MPOT_1);
-	}
-}
+// OUTPUT:  Action to perform
 
 void InputOutputUtils::openThumb() {
 
@@ -186,295 +120,71 @@ void InputOutputUtils::closeThumb() {
 	}
 }
 
+void InputOutputUtils::openForefinger() {
+
+	logger.debug((char*)"IOUTILS::openForefinger\n");
+
+	if(getForefingerPosition() == CLOSE){
+		logger.info((char*)"IOUTILS::openForefinger-OPEN\n");
+		fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+	}
+}
+
+void InputOutputUtils::closeForefinger() {
+
+	logger.debug((char*)"IOUTILS::closeForefinger\n");
+
+	if(getForefingerPosition() == OPEN){
+		logger.info((char*)"IOUTILS::closeForefinger-CLOSE\n");
+		fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
+	}
+}
+
 
 /******************************************************************************/
 /* PCB CONTROLS                                                               */
 /******************************************************************************/
 
+// TODO 
+// Tener en cuenta las posibles conversiones/ajustes
+// Necesito saber que potenciómetros son
+void InputOutputUtils::initPotValue(int potId){
+	logger.info((char*)"IOUTILS::setPotValue\n");
 
-void InputOutputUtils::fingerControl(int motorId, int motorDir, int controlId){
+}
 
-	/*
+// TODO
+// Tener en cuenta las posibles conversiones/ajustes
+// Necesito saber que potenciómetros son
+int InputOutputUtils::getPotValue(int potId){
+
+	logger.info((char*)"IOUTILS::getPotValue\n");
+	return 0;
+
+}
+
+// TODO 
+void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
+
 	logger.info((char*)"IOUTILS::fingerControl\n");
 
-    double setpoint, input, output;
-
-    input = map(multiplexorRead(controlId), 0, 1023, 0, MOTOR_SPEED);
-
-    logger.info((char*)"IOUTILS::fingerControlPID - input: %f\n", input);
-
-    PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
-
-    if (motorDir == OPEN){
-
-    	setpoint = MOTOR_SPEED_MIN;
-    	logger.info((char*)"IOUTILS::fingerControlPID - OPEN - final setpoint: %f\n", setpoint);
-  
-    	// Initialize PID
-    	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
-
-
-    }else if (motorDir == CLOSE){
-
-    	setpoint = MOTOR_SPEED;
-    	logger.info((char*)"IOUTILS::fingerControlPID - CLOSE  - final setpoint: %f\n", setpoint);
-  
-    	// Initialize PID
-    	pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, DIRECT);
-    }
-
-    //Turn on the PID loop
-    pid.SetMode(AUTOMATIC);
-    pid.SetOutputLimits(0, MOTOR_SPEED);
-
-    while(abs(input - setpoint) >  PID_LIMITS){
-
-    	input = map(multiplexorRead(controlId), 0, 1024, 0, MOTOR_SPEED);
-    	//input = multiplexorRead(controlId);
-
-    	pid.Compute();
-      
-    	motorControl(motorId, motorDir, round(output));
-
-   	 	logger.info((char*)"IOUTILS::fingerControlPID - setpoint value: %f\n", setpoint);
-    	logger.info((char*)"IOUTILS::fingerControlPID - input value:    %f\n", input);
-    	logger.info((char*)"IOUTILS::fingerControlPID - output value:   %f\n", output);
-
-    }
-
-    logger.info((char*)"IOUTILS::fingerControlPID - Stopping motor\n");
-    motorControl(motorId, motorDir, MOTOR_SPEED_MIN);
-
-	*/
+	// Control PID
+	// Llamada a motors control
 
 }
 
-
-
-int InputOutputUtils::getRelativePotValue(int controlId, int currentValue) {
-
-	int relativeValue = 0;
-
-/*
-
-	 if(controlId == CONTROL_INPUT_POTENTIOMETER_MITTEN)
-		 relativeValue = currentValue - relativePotMittenValue;
-	  else if (controlId == CONTROL_INPUT_POTENTIOMETER_FOREFINGER)
-		 relativeValue = currentValue - relativePotForefingerValue;
-	 else if  (controlId == CONTROL_INPUT_POTENTIOMETER_THUMB)
-		 relativeValue = currentValue - relativePotThumbValue;
-
-
-	 if (relativeValue < 0)
-		 relativeValue = 1024 - relativeValue;
-
-*/
-	 return relativeValue;
-
-
-
-}
-
-
-void InputOutputUtils::initialFingerControl(int motorId,  int controlId){
-
-	//initialFingerControlTime(motorId, controlId);
-	//initialFingerControlPID(motorId, controlId);
-}
-
-/*
-void InputOutputUtils::initialFingerControlTime(int motorId,  int controlId){
-
-	logger.info((char*)"IOUTILS::initialFingerControlTime\n");
-
-	int initialPosition = multiplexorRead(controlId);
-	int finalPosition = initialPosition;
-	logger.info((char*)"IOUTILS::initialFingerControlTime-initialPos: %d\n", initialPosition);
-
-	if(finalPosition < 200){
-		while(finalPosition < 200){
-			motorControl(motorId, CLOSE, 100);
-			delay(100);
-			finalPosition = multiplexorRead(controlId);
-		}
-	}
-
-	if(finalPosition > 800){
-		while(finalPosition > 800){
-			motorControl(motorId, OPEN, 100);
-			delay(100);
-			finalPosition = multiplexorRead(controlId);
-		}
-	}
-
-	logger.info((char*)"IOUTILS::initialFingerControlTime-finalPos: %d\n", finalPosition);
-
-}
-
-void InputOutputUtils::initialFingerControlPID(int motorId,  int controlId){
-
-	logger.info((char*)"IOUTILS::initialFingerControlPID\n");
-
-	double setpoint, input, output;
-	int motorDir;
-
-	input = map(multiplexorRead(controlId), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
-	//input = multiplexorRead(controlId);
-	logger.info((char*)"IOUTILS::initialFingerControlPID - input: %f\n", input);
-
-	setpoint = 0;
-	logger.info((char*)"IOUTILS::initialFingerControlPID - initialization setpoint: %f\n", setpoint);
-
-	PID pid = PID(&input, &output, &setpoint, PID_KP, PID_KI, PID_KD, REVERSE);
-	motorDir = OPEN;
-
-	//Turn on the PID loop
-	pid.SetMode(AUTOMATIC);
-	pid.SetOutputLimits(0,MOTOR_SPEED);
-
-	while(abs(input - setpoint) >  PID_LIMITS){
-
-		input = map(multiplexorRead(controlId), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
-		//input = multiplexorRead(controlId);
-
-		pid.Compute();
-
-		motorControl(motorId, motorDir, round(output));
-
-		input = map(multiplexorRead(controlId), 0, 1024, MOTOR_SPEED_MIN, MOTOR_SPEED);
-		//input = multiplexorRead(controlId);
-		logger.info((char*)"IOUTILS::initialFingerControlPID - loop input: %f\n", input);
-		logger.info((char*)"IOUTILS::initialFingerControlPID - loop output: %f\n", output);
-
-	}
-
-	logger.info((char*)"IOUTILS::initialFingerControlPID - Stop motor \n");
-	motorControl(motorId, motorDir, MOTOR_SPEED_MIN);
-
-}
-
-
-void InputOutputUtils::fingerControlTime(int motorId, int motorDir, int controlId){
-
-	logger.info((char*)"IOUTILS::fingerControlTime\n");
-
-	int initialPosition = multiplexorRead(controlId);
-	int finalPosition = initialPosition;
-	logger.info((char*)"IOUTILS::fingerControlTime-Initial pos: %d\n", initialPosition);
-
-	if((finalPosition < 200) || (finalPosition > 800)){
-
-		initialFingerControl(motorId, controlId);
-		logger.info((char*)"IOUTILS::fingerControlTime-Execute again finger control");
-		fingerControl(motorId, motorDir, controlId);
-
-	}else if((finalPosition) > 200 && (motorDir == OPEN)){
-
-		motorControl(motorId, OPEN , MOTOR_SPEED);
-		delay(100);
-		motorControl(motorId, OPEN, MOTOR_SPEED_MIN);
-		finalPosition = multiplexorRead(controlId);
-
-	}else if ((finalPosition < 800) && (motorDir == CLOSE)){
-		motorControl(motorId, CLOSE , MOTOR_SPEED);
-		delay(100);
-		motorControl(motorId, CLOSE, MOTOR_SPEED_MIN);
-		finalPosition = multiplexorRead(controlId);
-
-	}
-
-	logger.info((char*)"IOUTILS::fingerControlTime-Final pos: %d\n", finalPosition);
-      
-}
-
+// TODO 
+// Manejo motores con libreria ESP32Servo
+// https://www.st.com/en/automotive-analog-and-power/vnh7100as.html
 void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 
    logger.info((char*)"IOUTILS::motorControl\n");
 
-	// Forward Direction --> CLOSE --> 1
-   	// 1024 --> 0 (decrements)
 	if (motorDir) { 
-		logger.info((char*)"IOUTILS::motorControl-forward direction-CLOSE\n");
-		digitalWrite(MOTOR_CONTROL_MATRIX[motorID][1], LOW);
-		//analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], motorSpeed);
-	// Backward Direction --> OPEN --> 0
-	// 0 --> 1024 (increments)
+		logger.info((char*)"IOUTILS::motorControl - forward direction - CLOSE\n");
+		 
 	} else {
-		logger.info((char*)"IOUTILS::motorControl-backward direction-OPEN\n");
-		digitalWrite(MOTOR_CONTROL_MATRIX[motorID][1], HIGH);
-		//analogWrite(MOTOR_CONTROL_MATRIX[motorID][0], (MOTOR_SPEED_MAX - motorSpeed));
-	}
-  
-}
-
-*/
-
-int InputOutputUtils::multiplexorRead(int controlId){
-
-	int readedValue = 0;
-	//analogRead(MUX_MAIN);
-
-
-/*
-	// Main Multiplexer (vs Acc Multiplexer)
+		logger.info((char*)"IOUTILS::motorControl - backward direction - OPEN\n");
 		
-	// Lecture Sensors through 74HC4051 Multiplexer
-	// Entry channel selection for 74HC4051
-	
-	logger.info((char*)"IOUTILS::multiplexorRead-input[%i]\n", controlId);
-
-	int cA = controlId & 0x01;   
-	int cB = (controlId>>1) & 0x01;     
-	int cC = (controlId>>2) & 0x01;   
-	
-	digitalWrite(MUX_A, cA);
-	digitalWrite(MUX_B, cB);
-	digitalWrite(MUX_C, cC);
-  
-	if ((controlId == CONTROL_INPUT_POTENTIOMETER_MITTEN) || (controlId == CONTROL_INPUT_POTENTIOMETER_FOREFINGER) || (controlId == CONTROL_INPUT_POTENTIOMETER_THUMB))
-		readedValue = getRelativePotValue(controlId, readedValue);
-
-	logger.info((char*)"IOUTILS::multiplexorRead-output[%i]\n", readedValue);
-	
-
-*/
-
-	return readedValue;
-
-
+	}
 }
-
-
-int InputOutputUtils::initializePotMultiplexorRead(int controlId){
-
-	int readedValue = 0;
-	//analogRead(MUX_MAIN);
-
-	/*
-
-	// Main Multiplexer (vs Acc Multiplexer)
-
-	// Lecture Sensors through 74HC4051 Multiplexer
-	// Entry channel selection for 74HC4051
-
-	logger.info((char*)"IOUTILS::initializePotMultiplexorRead-input[%i]\n", controlId);
-
-	int cA = controlId & 0x01;
-	int cB = (controlId>>1) & 0x01;
-	int cC = (controlId>>2) & 0x01;
-
-	digitalWrite(MUX_A, cA);
-	digitalWrite(MUX_B, cB);
-	digitalWrite(MUX_C, cC);
-
-	int readedValue = analogRead(MUX_MAIN);
-
-	logger.info((char*)"IOUTILS::initializePotMultiplexorRead-output[%i]\n", readedValue);
-
-	*/
-
-	return readedValue;
-
-}
-
-

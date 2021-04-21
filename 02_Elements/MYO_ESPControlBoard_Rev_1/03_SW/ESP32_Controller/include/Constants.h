@@ -131,30 +131,25 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 // OUTPUT pin for LED RGB
 #define PIN_LED_RGB      17
 
-// THUMB MOTOR
-// PWM
-#define PIN_MOT_EN_0      4
+// THUMB MOTOR + POT
 // INA
 #define PIN_MOT_A_0      18
 //INB
 #define PIN_MOT_B_0      19
+// PWM
+#define PIN_MOT_EN_0      4
 // POT
 #define PIN_MPOT_0       27
 
-// FORE or MITTEN MOTOR
-// PWM
-#define PIN_MOT_EN_1      5
+// FOREFINGER MOTOR
 // INA
 #define PIN_MOT_A_1      25
 // INB
 #define PIN_MOT_B_1      14
+// PWM
+#define PIN_MOT_EN_1      5
 // POT
 #define PIN_MPOT_1       32
-
-const int FINGER_MOTORS_MATRIX[2][2] = {
-    { PIN_MOT_A_0, PIN_MOT_B_0},    // THUMB    
-    { PIN_MOT_A_1, PIN_MOT_B_1}     // FORE 
-};
 
 // Sensors
 #define PIN_MSEN_0       12
@@ -169,6 +164,23 @@ const int FINGER_MOTORS_MATRIX[2][2] = {
 #define PIN_SDA          21
 // SCL: I2C Clock
 #define PIN_SCL          22
+
+
+#define A 0
+#define B 1
+const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
+      // THUMB      // FORE 
+    { PIN_MOT_A_0, PIN_MOT_B_0},  // A 
+    { PIN_MOT_A_1, PIN_MOT_B_1}   // B 
+};
+
+// #define PWM  0 
+// #define ADC  1
+// const int MOTOR_CHANNELS_MATRIX[FINGERS][2] = {
+//       // THUMB      // FORE 
+//     { PIN_MOT_EN_0 , PIN_MOT_EN_1},  //  PWM
+//     { PIN_MPOT_0   , PIN_MPOT_1  }   //  ADC
+// };
 
 
 /*****************************************************************************/

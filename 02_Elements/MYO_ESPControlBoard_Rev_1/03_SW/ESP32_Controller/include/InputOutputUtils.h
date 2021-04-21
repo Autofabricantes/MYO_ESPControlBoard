@@ -11,31 +11,19 @@ class InputOutputUtils{
 
   private:
 
-
-	int relativePotMittenValue;
-	int relativePotForefingerValue;
-	int relativePotThumbValue;
+	int potForefingerValue;
+	int potThumbValue;
 
 	// State to retrieve current finger's position
     State currentState;
 
-    // Myo Arm brand controller
-    MyoUtils myoUtils;
-
     // Motor Control method
     void motorControl(int motorID, int motorDir, int motorSpeed);
-
-    // Multiplexor lecture method
-    int multiplexorRead(int controlId);
-    int initializePotMultiplexorRead(int controlId);
 
 	// Finger control methods
 	void fingerControl(int motorId, int motorDir, int controlId);
 
-	void initialFingerControlTime(int motorId, int controlId);
-	void fingerControlTime(int motorId, int motorDir, int controlId);
-	void initialFingerControlPID(int motorId, int controlId);
-	void fingerControlPID(int motorId, int motorDir, int controlId);
+
 
   public:
 
@@ -48,17 +36,18 @@ class InputOutputUtils{
     // Test controller
     Test test;
 
+    // Myo Arm brand controller
+    MyoUtils myoUtils;
+
     // Initialization of INPUT sensors
     void initIO();
-        // Reset INPUT/OUTPUT elements
+    
+    // Reset INPUT/OUTPUT elements
     void resetIO();
 
-	int getRelativePotValue(int controlId, int currentValue);
-
-	// TODO - TAKE BACK TO PRIVATE
-    void initialFingerControl(int motorId, int controlId);
-
-
+    // Handles potentiometer
+	void initPotValue(int potId);
+    int  getPotValue(int potId);
 
 	// Identifies the state selected by user from input elements feedback
     // An interpretation and treatment of readed data from sensors will be  
@@ -66,38 +55,34 @@ class InputOutputUtils{
   	// without  ambiguity
     // returns: Transition value
     int getTransitionToPerform(State state);
-	
-    // Detects mitten position from output elements feedback
-    // returns: OPEN|CLOSE
-	// TODO: Two solutions for fingers position
-    //  - Detect where the finger is
-    //  - Trust where the state says we are
-    //int getMittenPosition();
-
-    // Detects forefinger position from output elements feedback
-    // returns: OPEN|CLOSE
-	// TODO: Two solutions for fingers position
-    //  - Detect where the finger is
-    //  - Trust where the state says we are
-    int getForefingerPosition();
 
     // Detects thumb position from output elements feedback
     // returns: OPEN|CLOSE
 	// TODO: Two solutions for fingers position
     //  - Detect where the finger is
     //  - Trust where the state says we are
+    // What happens if finger position is diferent to current position?
     int getThumbPosition();
+
+    // Detects forefinger position from output elements feedback
+    // returns: OPEN|CLOSE
+	// TODO: Two solutions for fingers position
+    //  - Detect where the finger is
+    //  - Trust where the state says we are
+    // What happens if finger position is diferent to current position?
+    int getForefingerPosition();
 
 
     /**************************************************************************/
     /* OUTPUT METHODS                                                         */
     /**************************************************************************/
 
-    // Moves mitten to OPEN postion if necesary
-    //void openMitten();
+
+    // Moves thumb to OPEN postion if necesary
+    void openThumb();
 
     // Moves mitten to CLOSE postion if necesary
-    //void closeMitten();
+    void closeThumb();
 
     // Moves forefinger to OPEN postion if necesary
     void openForefinger();
@@ -105,11 +90,6 @@ class InputOutputUtils{
     // Moves forefinger to CLOSE postion if necesary
     void closeForefinger();
 
-    // Moves thumb to OPEN postion if necesary
-    void openThumb();
-
-    // Moves mitten to CLOSE postion if necesary
-    void closeThumb();
 
 };
 

@@ -53,7 +53,8 @@ void Test::testingBoard(){
     	ledRGB.setPixelColor(0, random(0,100), random(0,100), random(0,100)); // Moderately bright green color.
   	}
   	Serial.print(".");
-  	ledRGB.show(); // This sends the updated pixel color to the hardware.
+	// This sends the updated pixel color to the hardware.
+  	ledRGB.show();
   	delay(10);
 }
 

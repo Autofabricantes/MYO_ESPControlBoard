@@ -26,15 +26,16 @@ InputOutputUtils inputOutputUtils;
 //          * 192.168.1.157/update
  //         * Seleccionamos firmware.
  //         * Se sube el nuevo .bin generado.
- // TODO: 
+ //
  //         * Ver trazas de ejecución desde el mismo equipo (https://www.megunolink.com/articles/wireless/talk-esp32-over-wifi/)
  //         * Solucionar el problema del espacio. Ahora mismo no se puede cargar el webserver en la ESP32.
  //           https://community.home-assistant.io/t/esp32cam-ble-error-the-program-size-is-greater-than-maximum-allowed/158313
  //           https://gitter.im/espressif/arduino-esp32?at=5e2f0581f196225bd66957fd
 // void activateOTA();
 
+// TODELETE:  Parece que no es mecesario    
 // STATUS:    Ahora se ve el servidor de bluetooth en el movil
-// TODO:      Tendremos que crear la conexión con la Myo Armband
+//            Tendremos que crear la conexión con la Myo Armband
 //            https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/
 // void activateBLE();
 
