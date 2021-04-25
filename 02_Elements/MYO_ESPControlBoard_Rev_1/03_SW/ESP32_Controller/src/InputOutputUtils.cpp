@@ -1,16 +1,16 @@
-#include <PID_v1.h>
-#include "InputOutputUtils.h"
+#include <Arduino.h>
 
+#include "InputOutputUtils.h"
 
 /******************************************************************************/
 /* INITIALIZATION INPUT METHODS                                               */
 /******************************************************************************/
 
-InputOutputUtils::InputOutputUtils(){}
-
 void InputOutputUtils::initIO() {
 
-	logger.debug((char*)"IOUTILS::initializeInputElements\n");
+	log_e(">> initIO");
+
+	stateMachine.start();
 
 	// Initialize switch pinout
 	pinMode(PIN_SW_0, INPUT);
@@ -30,23 +30,83 @@ void InputOutputUtils::initIO() {
 	initPotValue(PIN_MPOT_0);
 	initPotValue(PIN_MPOT_1);
 
-	// Myo connection
-	myoUtils.connect();
+	//Myo connection
+	//myoUtils.connect();
 
-	// Init testing class
-	test = Test();
+	//Init testing class
+	//test = Test();
 
 }
 
 // Posiblemente pueda reutilizar INIT pero mantenemos esta por si necesito activar solo algunos elementos.
 void InputOutputUtils::resetIO() {
 
-	logger.debug((char *)"IOUTILS::resetIO\n");
+	log_e(">> resetIO");
 
 	// Reset potentiometers
 	initPotValue(PIN_MPOT_0);
 	initPotValue(PIN_MPOT_1);
 	
+}
+
+
+/******************************************************************************/
+/* TRANSITIONS                                                                */
+/******************************************************************************/
+
+// INPUT: Action received
+void InputOutputUtils::executeTransition() {
+
+	log_e(">> executeTransition");
+
+	int inputTransition = TRANSITION_TO_NOTHING;
+	int transtionToPerform = TRANSITION_TO_NOTHING;
+
+	if (mode == TEST_MODE_TRANSITIONS)
+		inputTransition = test.getKeyboardTransition();
+	else
+		inputTransition = test.getKeyboardTransition(); //myoUtils.getMyoTransition();
+
+	transtionToPerform = stateMachine.getTransitionToPerform(inputTransition);
+
+    if(transtionToPerform == TRANSITION_TO_INACTIVE)
+        transitionToInactive();
+    else if(transtionToPerform == TRANSITION_TO_IDLE)
+        transitionToIdle();
+    else if (transtionToPerform == TRANSITION_TO_TONGS)
+        transitionToTongs();
+
+	// TODO
+	// Tendríamos que contralar de alguna manera que si ha habido un problema 
+	// para ejecutar la transición debemos mantenernos en el estado que estábamos	
+}
+
+void InputOutputUtils::transitionToInactive(){
+
+	log_e(">> transitionToInactive");
+
+	// Open thumb + Open forefinger
+	fingerControl(THUMB, OPEN, PIN_MPOT_1);	
+	fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+}
+
+void InputOutputUtils::transitionToIdle(){
+
+	log_e("transitionToIdle");
+	
+	// Open thumb + Open forefinger
+	fingerControl(THUMB, OPEN, PIN_MPOT_1);
+	fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+}
+
+void InputOutputUtils::transitionToTongs(){
+
+	log_e(">> transitionToTongs");
+
+	// Close thumb + Close forefinger
+	fingerControl(THUMB,CLOSE, PIN_MPOT_0);
+	fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
+
 }
 
 /******************************************************************************/
@@ -59,86 +119,19 @@ void InputOutputUtils::resetIO() {
 // restaurar la posicion si es necesario.
 int InputOutputUtils::getThumbPosition() {
 
-	int thumbPosition = currentState.getThumbPosition();
-	logger.debug((char*)"IOUTILS::getThumbPos: %i\n", thumbPosition);
+	int thumbPosition = stateMachine.getThumbPosition();
+	log_e(">> getThumbPosition: %i", thumbPosition);
 
 	return thumbPosition;
 }
 int InputOutputUtils::getForefingerPosition() {
 
-	int forefingerPosition = currentState.getForefingerPosition();
-	logger.debug((char*)"IOUTILS::getForefingerPos: %i\n", forefingerPosition);
+	int forefingerPosition = stateMachine.getForefingerPosition();
+	log_e(">> getForefingerPosition: %i", forefingerPosition);
 
 	return forefingerPosition;
 }
 
-
-
-/******************************************************************************/
-/* TRANSITIONS                                                                */
-/******************************************************************************/
-
-// INPUT: Action received
-int InputOutputUtils::getTransitionToPerform(State state) {
-
-	logger.debug((char*)"IOUTILS::getTransitionToPerform\n");
-
-	currentState = state;
-
-	int transitionTo = 0;
-
-	if (mode == TEST_MODE_TRANSITIONS)
-		transitionTo = test.getKeyboardTransition();
-	else
-		transitionTo = myoUtils.getMyoTransition();
-
-	return transitionTo;
-	
-}
-
-// OUTPUT:  Action to perform
-
-void InputOutputUtils::openThumb() {
-
-	logger.info((char*)"IOUTILS::openThumb\n");
-
-	if(getThumbPosition() == CLOSE){
-		logger.info((char*)"IOUTILS::openThumb-OPEN\n");
-		fingerControl(THUMB, OPEN, PIN_MPOT_1);
-	}
-
-}
-
-void InputOutputUtils::closeThumb() {
-
-	logger.info((char*)"IOUTILS::closeThumb\n");
-
-	if(getThumbPosition() == CLOSE){
-		logger.info((char*)"IOUTILS::closeThumb-CLOSE\n");
-	if (mode != TEST_MODE_TRANSITIONS)
-		fingerControl(THUMB,CLOSE, PIN_MPOT_0);
-	}
-}
-
-void InputOutputUtils::openForefinger() {
-
-	logger.debug((char*)"IOUTILS::openForefinger\n");
-
-	if(getForefingerPosition() == CLOSE){
-		logger.info((char*)"IOUTILS::openForefinger-OPEN\n");
-		fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
-	}
-}
-
-void InputOutputUtils::closeForefinger() {
-
-	logger.debug((char*)"IOUTILS::closeForefinger\n");
-
-	if(getForefingerPosition() == OPEN){
-		logger.info((char*)"IOUTILS::closeForefinger-CLOSE\n");
-		fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
-	}
-}
 
 
 /******************************************************************************/
@@ -149,7 +142,7 @@ void InputOutputUtils::closeForefinger() {
 // Tener en cuenta las posibles conversiones/ajustes
 // Necesito saber que potenciómetros son
 void InputOutputUtils::initPotValue(int potId){
-	logger.info((char*)"IOUTILS::setPotValue\n");
+	log_e(">> initPotValue");
 
 }
 
@@ -158,7 +151,7 @@ void InputOutputUtils::initPotValue(int potId){
 // Necesito saber que potenciómetros son
 int InputOutputUtils::getPotValue(int potId){
 
-	logger.info((char*)"IOUTILS::getPotValue\n");
+	log_e(">> getPotValue");
 	return 0;
 
 }
@@ -166,7 +159,7 @@ int InputOutputUtils::getPotValue(int potId){
 // TODO 
 void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
 
-	logger.info((char*)"IOUTILS::fingerControl\n");
+	log_e(">> fingerControl");
 
 	// Control PID
 	// Llamada a motors control
@@ -178,13 +171,13 @@ void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
 // https://www.st.com/en/automotive-analog-and-power/vnh7100as.html
 void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 
-   logger.info((char*)"IOUTILS::motorControl\n");
+   log_e(">> motorControl");
 
 	if (motorDir) { 
-		logger.info((char*)"IOUTILS::motorControl - forward direction - CLOSE\n");
+		log_e("motorControl - forward direction - CLOSE");
 		 
 	} else {
-		logger.info((char*)"IOUTILS::motorControl - backward direction - OPEN\n");
+		log_e("motorControl - backward direction - OPEN");
 		
 	}
 }

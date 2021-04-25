@@ -12,7 +12,7 @@ class Test{
     bool swActiveMomentary();
 
   public:
-    Test();
+    void initTestingElements();
 	  int  getKeyboardTransition();
     void testingBoard();
 

@@ -2,9 +2,10 @@
 #define INPUT_OUTPUT_UTILS_H
 
 #include "Constants.h"
-#include "MyoUtils.h"
-#include "State.h"
+#include "StateMachine.h"
 #include "Test.h"
+//#include "myo.h"
+
 
 
 class InputOutputUtils{
@@ -14,8 +15,9 @@ class InputOutputUtils{
 	int potForefingerValue;
 	int potThumbValue;
 
-	// State to retrieve current finger's position
-    State currentState;
+    // Handles potentiometer
+	void initPotValue(int potId);
+    int  getPotValue(int potId);
 
     // Motor Control method
     void motorControl(int motorID, int motorDir, int motorSpeed);
@@ -31,13 +33,14 @@ class InputOutputUtils{
     /* INPUT METHODS                                                         */
     /*************************************************************************/
 
-    InputOutputUtils();
+    // State to retrieve current finger's position
+    StateMachine stateMachine;
     
     // Test controller
     Test test;
 
     // Myo Arm brand controller
-    MyoUtils myoUtils;
+    //myo myoUtils;
 
     // Initialization of INPUT sensors
     void initIO();
@@ -45,16 +48,19 @@ class InputOutputUtils{
     // Reset INPUT/OUTPUT elements
     void resetIO();
 
-    // Handles potentiometer
-	void initPotValue(int potId);
-    int  getPotValue(int potId);
-
 	// Identifies the state selected by user from input elements feedback
     // An interpretation and treatment of readed data from sensors will be  
 	// needed to perform the required transition to get the selected state 
   	// without  ambiguity
     // returns: Transition value
-    int getTransitionToPerform(State state);
+    void executeTransition();
+    
+    // Goes to innactive state depending on the current one
+    void transitionToInactive();
+	// Goes to idle state depending on the current one
+    void transitionToIdle();
+	// Goes to tongs state depending on the current one
+    void transitionToTongs();
 
     // Detects thumb position from output elements feedback
     // returns: OPEN|CLOSE
@@ -71,25 +77,6 @@ class InputOutputUtils{
     //  - Trust where the state says we are
     // What happens if finger position is diferent to current position?
     int getForefingerPosition();
-
-
-    /**************************************************************************/
-    /* OUTPUT METHODS                                                         */
-    /**************************************************************************/
-
-
-    // Moves thumb to OPEN postion if necesary
-    void openThumb();
-
-    // Moves mitten to CLOSE postion if necesary
-    void closeThumb();
-
-    // Moves forefinger to OPEN postion if necesary
-    void openForefinger();
-
-    // Moves forefinger to CLOSE postion if necesary
-    void closeForefinger();
-
 
 };
 

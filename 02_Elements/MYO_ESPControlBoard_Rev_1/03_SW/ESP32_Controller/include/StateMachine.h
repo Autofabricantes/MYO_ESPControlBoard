@@ -1,8 +1,6 @@
 #ifndef STATE_MACHINE_H
 #define STATE_MACHINE_H
 
-#include "State.h"
-#include "Transition.h"
 
 class StateMachine{
 
@@ -14,17 +12,27 @@ class StateMachine{
     // Resets state machine
 	void reset();
 
-    // Execute a transition
-    void executeTransition();
+    // Gets the state selected by user from input elements feedback
+    int getTransitionToPerform(int transition);
+
+    // Getters and setters
+    int  getState();
+    void setState(int state);
+
+	// Detects forefinger position from
+	// current state
+    int getForefingerPosition();
+
+	// Detects thumb position from
+    // current state
+    int getThumbPosition();
+
     
    private:
-   
-	// State machine's state
-    State state;
-	// State machine's transition
-    Transition transition;
 
-   
+    // Current state
+    int state;
+    int transition;
 
 };
 

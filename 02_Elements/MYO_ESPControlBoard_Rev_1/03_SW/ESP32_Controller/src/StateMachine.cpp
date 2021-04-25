@@ -1,85 +1,92 @@
-#include "StateMachine.h"
+#include <Arduino.h>
+
 #include "Constants.h"
-
-
-/******************************************************************************/
-/* PUBLIC METHODS                                                             */
-/******************************************************************************/
+#include "StateMachine.h"
 
 void StateMachine::start(){
 
-  logger.debug((char*)"STM::start\n");
+  log_e(">> start");
 
-  state = State();
-  transition = Transition();
+  state = STATE_INACTIVE;
+  transition = TRANSITION_TO_INACTIVE;
 
 }
  
 void StateMachine::reset(){
 
-  logger.debug((char*)"STM::reset\n");
+  log_e(">> reset");
 
-  state.reset();
-  transition.reset();
+  state = STATE_INACTIVE;
+  transition = TRANSITION_TO_INACTIVE;
 }
   
 
-void StateMachine::executeTransition(){
-
-    logger.debug((char*)"STM::executeTrans\n");
+int StateMachine::getTransitionToPerform(int transition){
     
-    int transitionToPeform = transition.getTransitionToPerform(state);
 
-    logger.debug((char*)"STM::executeTrans: %i\n", transitionToPeform);
+    log_e(">> getTransitionToPerform: %i", transition);
 
-    switch(transitionToPeform){
+    int transitionToPerform = TRANSITION_TO_NOTHING;
 
-      case INVALID_TRANSITION:
-      break;
+    switch(transition){
 
-      case TRANSITION_TO_INACTIVE:
-        transition.transitionToInactive();
-        state.setCurrentState(STATE_INACTIVE);
-      break;
+    case TRANSITION_TO_INACTIVE:
+        transitionToPerform = TRANSITION_TO_INACTIVE;
+        state = STATE_INACTIVE;
+    break;
 
-      case TRANSITION_TO_IDLE:
-        transition.transitionToIdle();
-        state.setCurrentState(STATE_IDLE);
+    case TRANSITION_TO_IDLE:
+	    if(state != STATE_INACTIVE && state != TRANSITION_TO_IDLE){	
+        transitionToPerform = TRANSITION_TO_IDLE;
+        state = STATE_IDLE;
+      }
       break;
 
       case TRANSITION_TO_TONGS:
-        if(state.getCurrentState() != STATE_INACTIVE){
-          transition.transitionToTongs();
-          state.setCurrentState(STATE_TONGS);
+        if(state != STATE_INACTIVE && state != TRANSITION_TO_TONGS){
+          transitionToPerform = TRANSITION_TO_TONGS;
+          state = STATE_TONGS;
         }
       break;
-
-      // case TRANSITION_TO_FINGER:
-      //   if(state.getCurrentState() != STATE_INACTIVE){
-      //     transition.transitionToFinger();
-      //     state.setCurrentState(STATE_FINGER);
-      //   }
-      // break;
-
-      // case TRANSITION_TO_CLOSE:
-      //   if(state.getCurrentState() != STATE_INACTIVE){
-      //     transition.transitionToClose();
-      //     state.setCurrentState(STATE_CLOSE);
-      //   }
-      // break;
-
-      // case TRANSITION_TO_FIST:
-      //   if(state.getCurrentState() != STATE_INACTIVE){
-      //     transition.transitionToFist();
-      //     state.setCurrentState(STATE_FIST);
-      //   }
-      // break;
 
       default:
       break;
 
     }
+
+    return transitionToPerform;
+}
+
+int StateMachine::getState(){
+
+	log_e(">> getState: %d", state);
+
+	return state;
+}
+
+void StateMachine::setState(int currentState){
+
+	log_e(">> setState: %d", state);
+
+	state = currentState;
 }
 
 
+int StateMachine::getForefingerPosition(){
+  
+	int fingerPosition   = FINGER_POSITION_MATRIX[state][FOREFINGER];
+	log_e(">> getForefingerPosition - State[%i] - Pos[%i]", state, fingerPosition);
+
+	return fingerPosition;
+
+}
+
+int StateMachine::getThumbPosition(){
+  
+	int fingerPosition   = FINGER_POSITION_MATRIX[state][THUMB];
+	log_e(">> getThumbPosition - State[%i] - Pos[%i]", state, fingerPosition);
+
+	return fingerPosition;
+
+}
 

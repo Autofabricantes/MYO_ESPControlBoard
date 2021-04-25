@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #include "Test.h"
 
 /******************************************************************************/
@@ -5,34 +7,35 @@
 /******************************************************************************/
 
 
-Test::Test(){
-	logger.info((char*)"Init test........................\n");
- 	
-	memorySW = false;
+void Test::initTestingElements(){
 
-	ledRGB = Adafruit_NeoPixel(1, PIN_LED_RGB, NEO_RGB + NEO_KHZ800);
-	ledRGB.begin();
+	log_e(">> initTestingElements");
+ 	
+	// memorySW = false;
+
+	// ledRGB = Adafruit_NeoPixel(1, PIN_LED_RGB, NEO_RGB + NEO_KHZ800);
+	// ledRGB.begin();
 	// Moderately bright green color.
- 	ledRGB.setPixelColor(0, 255, 0, 255); 
-	 // This sends the updated pixel color to the hardware.
-  	ledRGB.show(); 
+ 	// ledRGB.setPixelColor(0, 255, 0, 255); 
+	//  This sends the updated pixel color to the hardware.
+  	// ledRGB.show(); 
     // Delay for a period of time (in milliseconds).
-	delay(500); 
+	// delay(500); 
 
 }
 
 int Test::getKeyboardTransition(){
 	int transition = 0;
 	
-	logger.info((char*)"Transition to: \n");
-	logger.info((char*)" (0) Transition to STATE_INACTIVE\n");
-	logger.info((char*)" (1) Transition to STATE_IDLE\n");
-	logger.info((char*)" (2) Transition to STATE_TONGS\n");
-	logger.info((char*)" (3) Transition to STATE_FINGER\n");
-	logger.info((char*)" (4) Transition to STATE_CLOSE\n");
-	logger.info((char*)" (5) Transition to STATE_FIST\n");
+	log_e("Transition to: ");
+	log_e(" (0) Transition to STATE_INACTIVE");
+	log_e(" (1) Transition to STATE_IDLE");
+	log_e(" (2) Transition to STATE_TONGS");
+	log_e(" (3) Transition to STATE_FINGER");
+	log_e(" (4) Transition to STATE_CLOSE");
+	log_e(" (5) Transition to STATE_FIST");
 
-	logger.info((char*)"(10) EXIT\n");
+	log_e("(10) EXIT");
 
 	// send data only when you receive data
 	while(!Serial.available());
@@ -40,34 +43,35 @@ int Test::getKeyboardTransition(){
 	// read the incoming byte
 	transition = Serial.parseInt();
 
-	logger.info((char*)" Input value: %d\n", transition);
+	log_e("Input value: %d", transition);
 
 	return transition;
-  
 }
 
 void Test::testingBoard(){
-	if(swActiveMomentary()){
-    	Serial.println("");
-    	Serial.println("PUSH!");
-    	ledRGB.setPixelColor(0, random(0,100), random(0,100), random(0,100)); // Moderately bright green color.
-  	}
-  	Serial.print(".");
-	// This sends the updated pixel color to the hardware.
-  	ledRGB.show();
-  	delay(10);
+
+	// if(swActiveMomentary()){
+    // 	log_e("PUSH!");
+    // 	ledRGB.setPixelColor(0, random(0,100), random(0,100), random(0,100)); // Moderately bright green color.
+  	// }
+	// // This sends the updated pixel color to the hardware.
+  	// ledRGB.show();
+  	// delay(10);
 }
 
 	
 bool Test::swActiveMomentary(){
-  bool newSW = digitalRead(PIN_SW_0);
-  if((memorySW)&&(!newSW)){
-    memorySW = newSW;
-    return true;
-  }else{
-    memorySW = newSW;
-    return false;
-  }
+//   bool newSW = digitalRead(PIN_SW_0);
+//   if((memorySW)&&(!newSW)){
+//     memorySW = newSW;
+//     return true;
+//   }else{
+//     memorySW = newSW;
+//     return false;
+//   }
+
+return false;
+
 }
 
 
