@@ -62,8 +62,9 @@
 // Transition Number
 #define TRANSITIONS_NUMBER             3
 
-// Transition to inactive state
-#define INVALID_TRANSITION            -1
+// No identified movement intention
+// or no movement to perform
+#define TRANSITION_TO_NOTHING          -1
 // Transition to inactive state
 #define TRANSITION_TO_INACTIVE         0
 // Transition to resting/initial state
@@ -77,7 +78,6 @@
 // Transition to fist state
 // #define TRANSITION_TO_FIST          5
 // No identified movement intention
-#define TRANSITION_TO_NOTHING          6
 
 // Fingers position matrix from states definition
 // TOREMEMBER: Adaptada a los estados y motores actuales
@@ -92,11 +92,13 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 /*************************************************************************/
 /* MOTORS/FINGERS                                                        */
 /*************************************************************************/
+// TODO: Límites de velocidad de los motores
 
 // RASPY
 //MOTOR_CTRL_MIN = 0  
 //MOTOR_CTRL_MAX = 4096 
 
+// ARDUINO
 // Min Value for motors speed
 #define MOTOR_SPEED_MIN   0
 // Max Value for motors speed
@@ -108,8 +110,7 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 /*************************************************************************/
 /*  PID FUNCTION                                                         */
 /*************************************************************************/
-// Tuning PID parameters
-
+// TODO: Tuning PID parameters
 // Initial Proportional Gain
 #define PID_KP 6
 // Initial Integral Gain
@@ -174,14 +175,6 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
     { PIN_MOT_A_1, PIN_MOT_B_1}   // B 
 };
 
-// #define PWM  0 
-// #define ADC  1
-// const int MOTOR_CHANNELS_MATRIX[FINGERS][2] = {
-//       // THUMB      // FORE 
-//     { PIN_MOT_EN_0 , PIN_MOT_EN_1},  //  PWM
-//     { PIN_MPOT_0   , PIN_MPOT_1  }   //  ADC
-// };
-
 
 /*****************************************************************************/
 /* Configuration - FUNCTION MODE                                             */
@@ -199,7 +192,6 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 /* Configuration - Constants                                                   */
 /*****************************************************************************/
 const int mode = TEST_MODE_TRANSITIONS;
-
 
 /*****************************************************************************/
 /* Configuration - BLE                                                        */

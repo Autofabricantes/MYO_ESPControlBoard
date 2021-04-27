@@ -24,6 +24,8 @@ class myo
     void getAllData();
     
     BLEAddress pAddress = BLEAddress("f9:64:aa:5e:d8:ef");
+    //BLEAddress pAddress = BLEAddress("3C:61:05:3E:12:0C");
+    
     BLEClient* pClient;
     
     int temp; 

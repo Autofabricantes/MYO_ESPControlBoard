@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "InputOutputUtils.h"
+#include "Test.h"
 
 /******************************************************************************/
 /* INITIALIZATION INPUT METHODS                                               */
@@ -33,9 +34,6 @@ void InputOutputUtils::initIO() {
 	//Myo connection
 	//myoUtils.connect();
 
-	//Init testing class
-	//test = Test();
-
 }
 
 // Posiblemente pueda reutilizar INIT pero mantenemos esta por si necesito activar solo algunos elementos.
@@ -63,11 +61,13 @@ void InputOutputUtils::executeTransition() {
 	int transtionToPerform = TRANSITION_TO_NOTHING;
 
 	if (mode == TEST_MODE_TRANSITIONS)
-		inputTransition = test.getKeyboardTransition();
+		inputTransition = test->getKeyboardTransition();
 	else
-		inputTransition = test.getKeyboardTransition(); //myoUtils.getMyoTransition();
+		inputTransition = test->getKeyboardTransition(); //myoUtils.getMyoTransition();
 
 	transtionToPerform = stateMachine.getTransitionToPerform(inputTransition);
+
+	log_e(">> executeTransition - transtion readed: %i", transtionToPerform);
 
     if(transtionToPerform == TRANSITION_TO_INACTIVE)
         transitionToInactive();
@@ -76,9 +76,11 @@ void InputOutputUtils::executeTransition() {
     else if (transtionToPerform == TRANSITION_TO_TONGS)
         transitionToTongs();
 
-	// TODO
-	// Tendríamos que contralar de alguna manera que si ha habido un problema 
-	// para ejecutar la transición debemos mantenernos en el estado que estábamos	
+	// TODO: Tendríamos que contralar de alguna manera que si ha habido  
+	// un problema para ejecutar la transición debemos mantenernos en 
+	// un problema el estado que estábamos.	
+
+	log_e("<< executeTransition");
 }
 
 void InputOutputUtils::transitionToInactive(){
@@ -86,7 +88,7 @@ void InputOutputUtils::transitionToInactive(){
 	log_e(">> transitionToInactive");
 
 	// Open thumb + Open forefinger
-	fingerControl(THUMB, OPEN, PIN_MPOT_1);	
+	fingerControl(THUMB, OPEN, PIN_MPOT_0);	
 	fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
 }
 
@@ -95,7 +97,7 @@ void InputOutputUtils::transitionToIdle(){
 	log_e("transitionToIdle");
 	
 	// Open thumb + Open forefinger
-	fingerControl(THUMB, OPEN, PIN_MPOT_1);
+	fingerControl(THUMB, OPEN, PIN_MPOT_0);
 	fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
 }
 
@@ -104,7 +106,7 @@ void InputOutputUtils::transitionToTongs(){
 	log_e(">> transitionToTongs");
 
 	// Close thumb + Close forefinger
-	fingerControl(THUMB,CLOSE, PIN_MPOT_0);
+	fingerControl(THUMB, CLOSE, PIN_MPOT_0);
 	fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
 
 }
@@ -112,11 +114,6 @@ void InputOutputUtils::transitionToTongs(){
 /******************************************************************************/
 /* FINGERS POSITION                                                           */
 /******************************************************************************/	
-// TODO
-// Ahora mismo simplemente recuperamos la posición de los dedos de la máquina 
-// de estados.
-// Tenedremos que revisar en que posicion se encuentar el dedo realmente para
-// restaurar la posicion si es necesario.
 int InputOutputUtils::getThumbPosition() {
 
 	int thumbPosition = stateMachine.getThumbPosition();
@@ -137,41 +134,36 @@ int InputOutputUtils::getForefingerPosition() {
 /******************************************************************************/
 /* PCB CONTROLS                                                               */
 /******************************************************************************/
-
-// TODO 
-// Tener en cuenta las posibles conversiones/ajustes
-// Necesito saber que potenciómetros son
 void InputOutputUtils::initPotValue(int potId){
-	log_e(">> initPotValue");
+
+	// TODO: Reseto de pots. ¿Aplicamos una pos relativa?
+	log_e(">> initPotValue(%i)", potId);
 
 }
 
-// TODO
-// Tener en cuenta las posibles conversiones/ajustes
-// Necesito saber que potenciómetros son
 int InputOutputUtils::getPotValue(int potId){
 
-	log_e(">> getPotValue");
+	// TODO: Lectura de pots (posición relativa?)
+	log_e(">> getPotValue(%i)", potId);
 	return 0;
 
 }
 
-// TODO 
 void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
 
-	log_e(">> fingerControl");
+	log_e(">> fingerControl(%i, %i, %i)", motor, motorDir, pot);
 
-	// Control PID
-	// Llamada a motors control
+	// TODO
+	// Control PID. Lectura de pot.
+	// TODO: Control de los motores (llamada a motorControl).
 
 }
 
-// TODO 
-// Manejo motores con libreria ESP32Servo
+// TODO: Manejo motores ¿con libreria ESP32Servo?
 // https://www.st.com/en/automotive-analog-and-power/vnh7100as.html
 void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 
-   log_e(">> motorControl");
+   log_e(">> motorControl(%i, %i, %i)", motorID, motorDir, motorSpeed);
 
 	if (motorDir) { 
 		log_e("motorControl - forward direction - CLOSE");
@@ -180,4 +172,6 @@ void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 		log_e("motorControl - backward direction - OPEN");
 		
 	}
+
+	log_e("<< motorControl");
 }

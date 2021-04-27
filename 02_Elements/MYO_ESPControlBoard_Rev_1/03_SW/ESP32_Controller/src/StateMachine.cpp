@@ -30,13 +30,15 @@ int StateMachine::getTransitionToPerform(int transition){
 
     switch(transition){
 
+    // TODO: Encontar un modo de bloqueo por el que si estamos inactivos
+    //       aunque llevemos acabo acciones no hay entrada de estados.
     case TRANSITION_TO_INACTIVE:
         transitionToPerform = TRANSITION_TO_INACTIVE;
         state = STATE_INACTIVE;
     break;
 
     case TRANSITION_TO_IDLE:
-	    if(state != STATE_INACTIVE && state != TRANSITION_TO_IDLE){	
+	    if(state != TRANSITION_TO_IDLE){	
         transitionToPerform = TRANSITION_TO_IDLE;
         state = STATE_IDLE;
       }

@@ -3,10 +3,12 @@
 
 #include "Constants.h"
 #include "StateMachine.h"
-#include "Test.h"
+
+class Test;
+
 //#include "myo.h"
 
-
+class Test;
 
 class InputOutputUtils{
 
@@ -15,16 +17,8 @@ class InputOutputUtils{
 	int potForefingerValue;
 	int potThumbValue;
 
-    // Handles potentiometer
-	void initPotValue(int potId);
-    int  getPotValue(int potId);
-
     // Motor Control method
     void motorControl(int motorID, int motorDir, int motorSpeed);
-
-	// Finger control methods
-	void fingerControl(int motorId, int motorDir, int controlId);
-
 
 
   public:
@@ -37,7 +31,7 @@ class InputOutputUtils{
     StateMachine stateMachine;
     
     // Test controller
-    Test test;
+    Test  * test;
 
     // Myo Arm brand controller
     //myo myoUtils;
@@ -62,21 +56,25 @@ class InputOutputUtils{
 	// Goes to tongs state depending on the current one
     void transitionToTongs();
 
+    // TODO: Ahora confiamos en dónde se supe sque está el dedo
+    // según la máquina de estados. Deberíamos ser capaces de 
+    // determinar dónde está el dedo realmente y
+    // restaurar la posicion si es necesario.
+
     // Detects thumb position from output elements feedback
     // returns: OPEN|CLOSE
-	// TODO: Two solutions for fingers position
-    //  - Detect where the finger is
-    //  - Trust where the state says we are
-    // What happens if finger position is diferent to current position?
     int getThumbPosition();
 
     // Detects forefinger position from output elements feedback
     // returns: OPEN|CLOSE
-	// TODO: Two solutions for fingers position
-    //  - Detect where the finger is
-    //  - Trust where the state says we are
-    // What happens if finger position is diferent to current position?
     int getForefingerPosition();
+
+    // Handles potentiometer
+	void initPotValue(int potId);
+    int  getPotValue(int potId);
+
+	// Finger control methods
+	void fingerControl(int motorId, int motorDir, int controlId);
 
 };
 

@@ -6,11 +6,10 @@
 /* PUBLIC METHODS                                                             */
 /******************************************************************************/
 
+void Test::setIoUtils(InputOutputUtils * ioUtilsClass){
 
-void Test::initTestingElements(){
+	ioUtils = ioUtilsClass;
 
-	log_e(">> initTestingElements");
- 	
 	// memorySW = false;
 
 	// ledRGB = Adafruit_NeoPixel(1, PIN_LED_RGB, NEO_RGB + NEO_KHZ800);
@@ -24,6 +23,7 @@ void Test::initTestingElements(){
 
 }
 
+
 int Test::getKeyboardTransition(){
 	int transition = 0;
 	
@@ -31,17 +31,13 @@ int Test::getKeyboardTransition(){
 	log_e(" (0) Transition to STATE_INACTIVE");
 	log_e(" (1) Transition to STATE_IDLE");
 	log_e(" (2) Transition to STATE_TONGS");
-	log_e(" (3) Transition to STATE_FINGER");
-	log_e(" (4) Transition to STATE_CLOSE");
-	log_e(" (5) Transition to STATE_FIST");
-
-	log_e("(10) EXIT");
 
 	// send data only when you receive data
 	while(!Serial.available());
 
 	// read the incoming byte
 	transition = Serial.parseInt();
+	Serial.flush();
 
 	log_e("Input value: %d", transition);
 
@@ -49,6 +45,66 @@ int Test::getKeyboardTransition(){
 }
 
 void Test::testingBoard(){
+
+	log_e("Testing board: ");
+	log_e(" (0) Close thumb");
+	log_e(" (1) Open thumb");
+	log_e(" (2) Close forefinger");
+	log_e(" (3) Open forefinger");
+	log_e(" (4) Get potentiometer thumb value");
+	log_e(" (5) Get potentiometer thumb value");
+	log_e(" (6) Switch");
+
+	log_e("(7) EXIT");
+
+	// send data only when you receive data
+	while(!Serial.available());
+
+	// read the incoming byte
+	int option = Serial.parseInt();
+	Serial.flush();
+
+	log_e("Input value: %d", option);
+
+	switch(option){
+
+		case 0:
+			ioUtils->fingerControl(THUMB, CLOSE, PIN_MPOT_0);
+		break;
+
+		case 1: 
+			ioUtils->fingerControl(THUMB, OPEN, PIN_MPOT_0);
+		break;
+
+		case 2:
+			ioUtils->fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
+		break;
+
+		case 3: 
+			ioUtils->fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+		break;
+
+		case 4:
+			ioUtils->getPotValue(PIN_MPOT_0);
+		break;
+
+		case 5:
+			ioUtils->getPotValue(PIN_MPOT_1);
+		break;
+
+		case 6:
+			switchLedRGB();
+		break;
+
+		case 7: 
+		default:
+		return; 
+	}
+
+
+}
+
+void Test::switchLedRGB(){
 
 	// if(swActiveMomentary()){
     // 	log_e("PUSH!");
@@ -58,9 +114,8 @@ void Test::testingBoard(){
   	// ledRGB.show();
   	// delay(10);
 }
-
 	
-bool Test::swActiveMomentary(){
+// bool Test::swActiveMomentary(){
 //   bool newSW = digitalRead(PIN_SW_0);
 //   if((memorySW)&&(!newSW)){
 //     memorySW = newSW;
@@ -69,9 +124,7 @@ bool Test::swActiveMomentary(){
 //     memorySW = newSW;
 //     return false;
 //   }
-
-return false;
-
-}
+//return false;
+//}
 
 

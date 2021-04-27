@@ -70,8 +70,8 @@ void myo::connect() {
     
     log_e("connect() - 6");
 
-    myo::pClient->connect(myo::pAddress);   
-
+    myo::pClient->connect(myo::pAddress, BLE_ADDR_TYPE_RANDOM);   
+    
     log_e("connect() - 7");
 
     myo::connected = true;

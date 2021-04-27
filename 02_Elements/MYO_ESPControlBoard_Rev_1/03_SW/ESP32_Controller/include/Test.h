@@ -3,6 +3,8 @@
 
 #include <Adafruit_NeoPixel.h>
 #include "Constants.h"
+#include "InputOutputUtils.h"
+
 
 class Test{
 
@@ -10,9 +12,11 @@ class Test{
     Adafruit_NeoPixel ledRGB;
     bool memorySW;
     bool swActiveMomentary();
+    void switchLedRGB();
+    InputOutputUtils * ioUtils;
 
   public:
-    void initTestingElements();
+    void setIoUtils(InputOutputUtils * ioUtilsClass);
 	  int  getKeyboardTransition();
     void testingBoard();
 
