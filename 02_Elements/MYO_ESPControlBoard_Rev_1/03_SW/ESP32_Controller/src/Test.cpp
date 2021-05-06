@@ -47,15 +47,20 @@ int Test::getKeyboardTransition(){
 void Test::testingBoard(){
 
 	log_e("Testing board: ");
+
 	log_e(" (0) Close thumb");
 	log_e(" (1) Open thumb");
 	log_e(" (2) Close forefinger");
 	log_e(" (3) Open forefinger");
 	log_e(" (4) Get potentiometer thumb value");
 	log_e(" (5) Get potentiometer thumb value");
+	
 	log_e(" (6) Switch");
 
-	log_e("(7) EXIT");
+	log_e(" (7) Get myo transition");
+	log_e(" (8) Get myo samples/serial plot");
+
+	log_e("(9) EXIT");
 
 	// send data only when you receive data
 	while(!Serial.available());
@@ -97,10 +102,17 @@ void Test::testingBoard(){
 		break;
 
 		case 7: 
+			ioUtils->getMyoTransitionTesting();
+		return; 
+
+		case 8: 
+			ioUtils->getMyoSerialTesting();
+		return; 
+
+		case 9: 
 		default:
 		return; 
 	}
-
 
 }
 

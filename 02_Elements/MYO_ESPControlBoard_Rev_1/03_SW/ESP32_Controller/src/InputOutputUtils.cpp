@@ -13,6 +13,8 @@ void InputOutputUtils::initIO() {
 
 	stateMachine.start();
 
+	myoUtils.connect();
+
 	// Initialize switch pinout
 	pinMode(PIN_SW_0, INPUT);
 
@@ -63,7 +65,7 @@ void InputOutputUtils::executeTransition() {
 	if (mode == TEST_MODE_TRANSITIONS)
 		inputTransition = test->getKeyboardTransition();
 	else
-		inputTransition = test->getKeyboardTransition(); //myoUtils.getMyoTransition();
+		inputTransition = myoUtils.getMyoTransition();
 
 	transtionToPerform = stateMachine.getTransitionToPerform(inputTransition);
 
@@ -174,4 +176,19 @@ void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 	}
 
 	log_e("<< motorControl");
+}
+
+
+
+  void InputOutputUtils::getMyoTransitionTesting(){
+
+	myoUtils.getMyoTransition();
+	
+}
+
+
+  void InputOutputUtils::getMyoSerialTesting(){
+
+	myoUtils.getMyoSerial();
+
 }

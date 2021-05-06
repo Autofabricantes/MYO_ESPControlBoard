@@ -3,10 +3,8 @@
 
 #include "Constants.h"
 #include "StateMachine.h"
+#include "MyoUtils.h"
 
-class Test;
-
-//#include "myo.h"
 
 class Test;
 
@@ -34,7 +32,7 @@ class InputOutputUtils{
     Test  * test;
 
     // Myo Arm brand controller
-    //myo myoUtils;
+    MyoUtils myoUtils;
 
     // Initialization of INPUT sensors
     void initIO();
@@ -75,6 +73,11 @@ class InputOutputUtils{
 
 	// Finger control methods
 	void fingerControl(int motorId, int motorDir, int controlId);
+
+    // Testing functions for Myo testing purposes
+    void getMyoTransitionTesting();
+    void getMyoSerialTesting();
+
 
 };
 
