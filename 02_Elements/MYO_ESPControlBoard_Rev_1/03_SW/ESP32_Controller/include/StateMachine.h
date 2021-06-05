@@ -31,8 +31,7 @@ class StateMachine{
    private:
 
     // Current state
-    int state;
-    int transition;
+    int currentState;
 
 };
 

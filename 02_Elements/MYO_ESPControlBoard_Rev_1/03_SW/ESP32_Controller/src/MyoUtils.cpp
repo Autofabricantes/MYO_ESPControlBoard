@@ -1,6 +1,6 @@
 #include "MyoUtils.h" 
 
-uint8_t MyoUtils::emg[16];
+uint8_t MyoUtils::emg[8];
 
 /********************************************************************************************************
     CONNECT/DISCONNECT
@@ -8,9 +8,9 @@ uint8_t MyoUtils::emg[16];
 
 void MyoUtils::connect(){
 
-	log_e ("Connecting Myo Armband...");
+	log_i ("Connecting Myo Armband...");
 	myo.connect();                               
-	log_e ("Connected!!!!");
+	log_i ("Connected!!!!");
  
 	//delay(100);
 	vTaskDelay(100);
@@ -22,9 +22,9 @@ void MyoUtils::connect(){
                      myohw_classifier_mode_enabled);  // Classifier mode
 
 
-	for (int i = 0; i < 16; i++) {
-		MyoUtils::emg[i] = 0;
-	}
+	//for (int i = 0; i < 16; i++) {
+	//	MyoUtils::emg[i] = 0;
+	//}
 
 	//myo.battery_notification(TURN_ON)->registerForNotify(batteryCallback);
 	//myo.imu_notification(TURN_ON)->registerForNotify(imuCallback);
@@ -35,12 +35,12 @@ void MyoUtils::connect(){
 	myo.vibration(myohw_vibration_short);
 
 	myo.get_firmware();
-	log_e("Firmware version: %d.%d.%d.%d", myo.fw_major, myo.fw_minor, myo.fw_patch, myo.fw_hardware_rev);
+	log_i("Firmware version: %d.%d.%d.%d", myo.fw_major, myo.fw_minor, myo.fw_patch, myo.fw_hardware_rev);
 
-	log_e("Battery: %d", myo.battery);
+	log_i("Battery: %d", myo.battery);
 
 	myo.get_info();
-	log_e("Armband info: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
+	log_i("Armband info: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
 		   myo.fw_serial_number[0], myo.fw_serial_number[1], myo.fw_serial_number[2], 
 		   myo.fw_serial_number[3], myo.fw_serial_number[4], myo.fw_serial_number[5], 
 		   myo.fw_serial_number[6], myo.fw_unlock_pose, myo.fw_active_classifier_type, 
@@ -55,9 +55,9 @@ void MyoUtils::detectDisconnect(){
 
 	if (!myo.connected) {
   
-    log_e ("Device disconnected: reconnecting...");
+    log_i ("Device disconnected: reconnecting...");
     myo.connect();
-    log_e("Reconnected!!!!!");
+    log_i("Reconnected!!!!!");
     myo.set_myo_mode(myohw_emg_mode_send_emg,               // EMG mode
                      myohw_imu_mode_send_data,              // IMU mode
                      myohw_classifier_mode_enabled);        // Classifier mode
@@ -76,61 +76,60 @@ void MyoUtils::detectDisconnect(){
 
 void MyoUtils::batteryCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
-	log_e(">> batteryCallback");
+	log_i(">> batteryCallback");
 
 	myo.battery = pData[0];
-	log_e("Battery: %d", myo.battery);
+	log_i("Battery: %d", myo.battery);
 	
 }
 
 void MyoUtils::imuCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
-	log_e(">> imuCallback");
+	log_d(">> imuCallback");
 
-	log_e("IMU: \t");
+	log_d("IMU: \t");
 	for (int i = 0; i < length; i++) {
-		log_e("%d", pData[i]);
+		log_d("%d", pData[i]);
 	}
-	log_e("%d", millis());
 }
 
 void MyoUtils::emgCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
-	//log_e(">> emgCallback");
-	//log_e("EMG: \t");
+	log_d(">> emgCallback");
+	log_d("EMG: \t");
+
+	log_e("Longitid: %d", length);
 
 	for (int i = 0; i < length; i++) {
 		MyoUtils::emg[i] = pData[i];
-		//log_e("%d", pData[i]);
-	}
-	//log_e("%d", millis());
-	
+		log_d("%d", pData[i]);
+	}	
 }
 
 void MyoUtils::gestureCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 	
 	// Print the gesture
 	if (pData[0] == myohw_classifier_event_pose) {
-	log_e ("Gesture: ");
+	 log_d("Gesture: ");
 	
     switch (pData[1]) {
 		case myohw_pose_rest:
-			log_e ("rest");
+			 log_d("rest");
         break;
 		case myohw_pose_fist:
-			log_e ("fist");
+			 log_d("fist");
         break;
 		case myohw_pose_wave_in:
-			log_e ("wave in");
+			 log_d("wave in");
         break;
 		case myohw_pose_wave_out:
-			log_e ("wave out");
+			 log_d("wave out");
         break;
 		case myohw_pose_fingers_spread:
-			log_e ("fingers spread");
+			 log_d("fingers spread");
         break;
 		case myohw_pose_double_tap:
-			log_e ("double tap");
+			 log_d("double tap");
         break;
 		default:
         break;
@@ -144,15 +143,29 @@ void MyoUtils::gestureCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic
 
 int MyoUtils::getMyoTransition(){
 
-    int transition = 0;
+    int transition = 0;       
        
-       
-    log_e("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
-           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7], 
-		   MyoUtils::emg[8], MyoUtils::emg[9], MyoUtils::emg[10], MyoUtils::emg[11], MyoUtils::emg[12], MyoUtils::emg[13], MyoUtils::emg[14], MyoUtils::emg[15]);        
-            
+    //log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
+    //       MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7], 
+	//	   MyoUtils::emg[8], MyoUtils::emg[9], MyoUtils::emg[10], MyoUtils::emg[11], MyoUtils::emg[12], MyoUtils::emg[13], MyoUtils::emg[14], MyoUtils::emg[15]);        
+    
+	Serial.print(MyoUtils::emg[0]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[1]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[2]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[3]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[4]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[5]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[6]);
+	Serial.print(",");
+	Serial.print(MyoUtils::emg[7]);
 
-     return transition;
+    return transition;
 
 }
 
@@ -161,29 +174,11 @@ void MyoUtils::getMyoSerial(){
 
 	do{
 
-    	log_e("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
-           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7], 
-		   MyoUtils::emg[8], MyoUtils::emg[9], MyoUtils::emg[10], MyoUtils::emg[11], MyoUtils::emg[12], MyoUtils::emg[13], MyoUtils::emg[14], MyoUtils::emg[15]);      
+    	log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
+           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);      
 
-
-		Serial.print(MyoUtils::emg[0]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[1]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[2]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[3]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[4]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[5]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[6]);
-		Serial.print(" ");
-		Serial.print(MyoUtils::emg[7]);
-		Serial.print(" ");
-
-		delay(1000);
+		vTaskDelay(1000);
+		//delay(1000);
 
 	}while(true);
 

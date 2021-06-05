@@ -9,7 +9,7 @@
 
 void InputOutputUtils::initIO() {
 
-	log_e(">> initIO");
+	log_i(">> initIO");
 
 	stateMachine.start();
 
@@ -41,7 +41,7 @@ void InputOutputUtils::initIO() {
 // Posiblemente pueda reutilizar INIT pero mantenemos esta por si necesito activar solo algunos elementos.
 void InputOutputUtils::resetIO() {
 
-	log_e(">> resetIO");
+	log_i(">> resetIO");
 
 	// Reset potentiometers
 	initPotValue(PIN_MPOT_0);
@@ -57,7 +57,7 @@ void InputOutputUtils::resetIO() {
 // INPUT: Action received
 void InputOutputUtils::executeTransition() {
 
-	log_e(">> executeTransition");
+	log_i(">> executeTransition");
 
 	int inputTransition = TRANSITION_TO_NOTHING;
 	int transtionToPerform = TRANSITION_TO_NOTHING;
@@ -69,7 +69,7 @@ void InputOutputUtils::executeTransition() {
 
 	transtionToPerform = stateMachine.getTransitionToPerform(inputTransition);
 
-	log_e(">> executeTransition - transtion readed: %i", transtionToPerform);
+	log_i(">> executeTransition - transtion readed: %i", transtionToPerform);
 
     if(transtionToPerform == TRANSITION_TO_INACTIVE)
         transitionToInactive();
@@ -82,12 +82,12 @@ void InputOutputUtils::executeTransition() {
 	// un problema para ejecutar la transición debemos mantenernos en 
 	// un problema el estado que estábamos.	
 
-	log_e("<< executeTransition");
+	log_i("<< executeTransition");
 }
 
 void InputOutputUtils::transitionToInactive(){
 
-	log_e(">> transitionToInactive");
+	log_i(">> transitionToInactive");
 
 	// Open thumb + Open forefinger
 	fingerControl(THUMB, OPEN, PIN_MPOT_0);	
@@ -96,7 +96,7 @@ void InputOutputUtils::transitionToInactive(){
 
 void InputOutputUtils::transitionToIdle(){
 
-	log_e("transitionToIdle");
+	log_i("transitionToIdle");
 	
 	// Open thumb + Open forefinger
 	fingerControl(THUMB, OPEN, PIN_MPOT_0);
@@ -105,7 +105,7 @@ void InputOutputUtils::transitionToIdle(){
 
 void InputOutputUtils::transitionToTongs(){
 
-	log_e(">> transitionToTongs");
+	log_i(">> transitionToTongs");
 
 	// Close thumb + Close forefinger
 	fingerControl(THUMB, CLOSE, PIN_MPOT_0);
@@ -119,14 +119,14 @@ void InputOutputUtils::transitionToTongs(){
 int InputOutputUtils::getThumbPosition() {
 
 	int thumbPosition = stateMachine.getThumbPosition();
-	log_e(">> getThumbPosition: %i", thumbPosition);
+	log_i(">> getThumbPosition: %i", thumbPosition);
 
 	return thumbPosition;
 }
 int InputOutputUtils::getForefingerPosition() {
 
 	int forefingerPosition = stateMachine.getForefingerPosition();
-	log_e(">> getForefingerPosition: %i", forefingerPosition);
+	log_i(">> getForefingerPosition: %i", forefingerPosition);
 
 	return forefingerPosition;
 }
@@ -139,21 +139,21 @@ int InputOutputUtils::getForefingerPosition() {
 void InputOutputUtils::initPotValue(int potId){
 
 	// TODO: Reseto de pots. ¿Aplicamos una pos relativa?
-	log_e(">> initPotValue(%i)", potId);
+	log_i(">> initPotValue(%i)", potId);
 
 }
 
 int InputOutputUtils::getPotValue(int potId){
 
 	// TODO: Lectura de pots (posición relativa?)
-	log_e(">> getPotValue(%i)", potId);
+	log_i(">> getPotValue(%i)", potId);
 	return 0;
 
 }
 
 void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
 
-	log_e(">> fingerControl(%i, %i, %i)", motor, motorDir, pot);
+	log_i(">> fingerControl(%i, %i, %i)", motor, motorDir, pot);
 
 	// TODO
 	// Control PID. Lectura de pot.
@@ -165,17 +165,17 @@ void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
 // https://www.st.com/en/automotive-analog-and-power/vnh7100as.html
 void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 
-   log_e(">> motorControl(%i, %i, %i)", motorID, motorDir, motorSpeed);
+   log_i(">> motorControl(%i, %i, %i)", motorID, motorDir, motorSpeed);
 
 	if (motorDir) { 
-		log_e("motorControl - forward direction - CLOSE");
+		log_i("motorControl - forward direction - CLOSE");
 		 
 	} else {
-		log_e("motorControl - backward direction - OPEN");
+		log_i("motorControl - backward direction - OPEN");
 		
 	}
 
-	log_e("<< motorControl");
+	log_i("<< motorControl");
 }
 
 

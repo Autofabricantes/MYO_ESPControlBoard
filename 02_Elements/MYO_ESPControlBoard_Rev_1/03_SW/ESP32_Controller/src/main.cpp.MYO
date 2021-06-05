@@ -19,57 +19,57 @@ int emdData[16];
 
 void batteryCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
-  log_e(">> batteryCallback");
+  log_i(">> batteryCallback");
 
   myo.battery = pData[0];
-  log_e("Battery: %d", myo.battery);
+  log_i("Battery: %d", myo.battery);
 }
 
 void imuCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
-  log_e(">> imuCallback");
+  log_i(">> imuCallback");
 
-  log_e("IMU: \t");
+  log_i("IMU: \t");
   for (int i = 0; i < length; i++) {
-    log_e("%d", pData[i]);
+    log_i("%d", pData[i]);
   }
-  log_e("%d", millis());
+  log_i("%d", millis());
 }
 
 void emgCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
-  //log_e(">> emgCallback");
-  //log_e("EMG: \t");
+  //log_i(">> emgCallback");
+  //log_i("EMG: \t");
 
   for (int i = 0; i < length; i++) {
     emdData[i] = pData[i];
-    //log_e("%d", pData[i]);
+    //log_i("%d", pData[i]);
   }
-  //log_e("%d", millis());
+  //log_i("%d", millis());
 }
 
 void gestureCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
   // Print the gesture
   if (pData[0] == myohw_classifier_event_pose) {
-    log_e ("Gesture: ");
+    log_i ("Gesture: ");
     switch (pData[1]) {
       case myohw_pose_rest:
-        log_e ("rest");
+        log_i ("rest");
         break;
       case myohw_pose_fist:
-        log_e ("fist");
+        log_i ("fist");
         break;
       case myohw_pose_wave_in:
-        log_e ("wave in");
+        log_i ("wave in");
         break;
       case myohw_pose_wave_out:
-        log_e ("wave out");
+        log_i ("wave out");
         break;
       case myohw_pose_fingers_spread:
-       log_e ("fingers spread");
+       log_i ("fingers spread");
         break;
       case myohw_pose_double_tap:
-        log_e ("double tap");
+        log_i ("double tap");
         break;
       default:
         break;
@@ -85,9 +85,9 @@ void setup()
 {
   Serial.begin(115200);                             // Start serial interface for debugging
   
-  log_e ("Connecting...");
+  log_i ("Connecting...");
   myo.connect();                                    // Connect to the myo
-  log_e ("Connected!!!!");
+  log_i ("Connected!!!!");
  
   //delay(100);
   vTaskDelay(100);
@@ -108,12 +108,12 @@ void setup()
   myo.vibration(myohw_vibration_short);
 
   myo.get_firmware();
-  log_e("Firmware version: %d.%d.%d.%d", myo.fw_major, myo.fw_minor, myo.fw_patch, myo.fw_hardware_rev);
+  log_i("Firmware version: %d.%d.%d.%d", myo.fw_major, myo.fw_minor, myo.fw_patch, myo.fw_hardware_rev);
 
-  log_e("Battery: %d", myo.battery);
+  log_i("Battery: %d", myo.battery);
 
   myo.get_info();
-  log_e("Armband info: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
+  log_i("Armband info: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
         myo.fw_serial_number[0], myo.fw_serial_number[1], myo.fw_serial_number[2], 
         myo.fw_serial_number[3], myo.fw_serial_number[4], myo.fw_serial_number[5], 
         myo.fw_serial_number[6], myo.fw_unlock_pose, myo.fw_active_classifier_type, 
@@ -127,17 +127,17 @@ void setup()
 void loop()
 {  
 
-  log_e("EMG sample..................................................");
+  log_i("EMG sample..................................................");
 
   for (int i = 0; i < 16; i++) {
-     log_e("%d", emdData[i]);
+     log_i("%d", emdData[i]);
   }
 
   // Detect disconnection
   if (!myo.connected) {
-    log_e ("Device disconnected: reconnecting...");
+    log_i ("Device disconnected: reconnecting...");
     myo.connect();
-    log_e ("Reconnected!!!!!");
+    log_i ("Reconnected!!!!!");
     myo.set_myo_mode(myohw_emg_mode_send_emg,               // EMG mode
                      myohw_imu_mode_send_data,              // IMU mode
                      myohw_classifier_mode_enabled);        // Classifier mode

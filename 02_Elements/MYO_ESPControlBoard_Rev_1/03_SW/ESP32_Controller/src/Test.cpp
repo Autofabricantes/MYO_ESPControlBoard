@@ -27,10 +27,11 @@ void Test::setIoUtils(InputOutputUtils * ioUtilsClass){
 int Test::getKeyboardTransition(){
 	int transition = 0;
 	
-	log_e("Transition to: ");
-	log_e(" (0) Transition to STATE_INACTIVE");
-	log_e(" (1) Transition to STATE_IDLE");
-	log_e(" (2) Transition to STATE_TONGS");
+	log_i("Transition to: ");
+	log_i(" (0) Transition to STATE_INACTIVE");
+	log_i(" (1) Transition to STATE_IDLE");
+	log_i(" (2) Transition to STATE_TONGS");
+	log_i(" (3) Do nothing");
 
 	// send data only when you receive data
 	while(!Serial.available());
@@ -39,28 +40,28 @@ int Test::getKeyboardTransition(){
 	transition = Serial.parseInt();
 	Serial.flush();
 
-	log_e("Input value: %d", transition);
+	log_i("Input value: %d", transition);
 
 	return transition;
 }
 
 void Test::testingBoard(){
 
-	log_e("Testing board: ");
+	log_i("Testing board: ");
 
-	log_e(" (0) Close thumb");
-	log_e(" (1) Open thumb");
-	log_e(" (2) Close forefinger");
-	log_e(" (3) Open forefinger");
-	log_e(" (4) Get potentiometer thumb value");
-	log_e(" (5) Get potentiometer thumb value");
+	log_i(" (0) Close thumb");
+	log_i(" (1) Open thumb");
+	log_i(" (2) Close forefinger");
+	log_i(" (3) Open forefinger");
+	log_i(" (4) Get potentiometer thumb value");
+	log_i(" (5) Get potentiometer thumb value");
 	
-	log_e(" (6) Switch");
+	log_i(" (6) Switch");
 
-	log_e(" (7) Get myo transition");
-	log_e(" (8) Get myo samples/serial plot");
+	log_i(" (7) Get myo transition");
+	log_i(" (8) Get myo samples/serial plot");
 
-	log_e("(9) EXIT");
+	log_i("(9) EXIT");
 
 	// send data only when you receive data
 	while(!Serial.available());
@@ -69,7 +70,7 @@ void Test::testingBoard(){
 	int option = Serial.parseInt();
 	Serial.flush();
 
-	log_e("Input value: %d", option);
+	log_i("Input value: %d", option);
 
 	switch(option){
 
@@ -119,7 +120,7 @@ void Test::testingBoard(){
 void Test::switchLedRGB(){
 
 	// if(swActiveMomentary()){
-    // 	log_e("PUSH!");
+    // 	log_i("PUSH!");
     // 	ledRGB.setPixelColor(0, random(0,100), random(0,100), random(0,100)); // Moderately bright green color.
   	// }
 	// // This sends the updated pixel color to the hardware.

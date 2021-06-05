@@ -13,28 +13,30 @@ void setup() {
 
   // Start serial interface for debugging
   Serial.begin(115200);                            
-  log_e(">> Setup.......");
+  log_i(">> Setup.......");
 
   // Start control board
-  inputOutputUtils.initIO();
-  
-  if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS)
-	  inputOutputUtils.initIO();
-  else if(mode ==  TEST_MODE_BOARD)
-    tester.setIoUtils(&inputOutputUtils);
-
+  if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS  || mode == TEST_MODE_MYO){
+	    inputOutputUtils.initIO();
+  }else if(mode ==  TEST_MODE_BOARD){
+      inputOutputUtils.initIO();
+      tester.setIoUtils(&inputOutputUtils);
+  }
 }
 
 void loop() {
 
   counter++;
 
-  log_e("Into the loop %i", counter);
+  log_i("Into the loop %i", counter);
+  Serial.print(counter);
 
-  log_e("Execution mode :%i", mode);
+  log_i("Execution mode :%i", mode);
 
   if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS)
     inputOutputUtils.executeTransition();
+  else if(mode == TEST_MODE_MYO)
+    inputOutputUtils.myoUtils.getMyoTransition();
   else if(mode == TEST_MODE_BOARD)
     tester.testingBoard();
 

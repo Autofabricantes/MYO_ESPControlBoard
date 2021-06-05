@@ -183,15 +183,17 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 // Buttons control to test and initialize
 #define TEST_MODE_TRANSITIONS   0
 #define TEST_MODE_BOARD         1
+#define TEST_MODE_MYO           2
+
 //Myo operative control
-#define OPERATION_MODE          2
+#define OPERATION_MODE          3
 
 
 
 /*****************************************************************************/
 /* Configuration - Constants                                                   */
 /*****************************************************************************/
-const int mode = TEST_MODE_BOARD;
+const int mode = TEST_MODE_MYO;
 
 /*****************************************************************************/
 /* Configuration - BLE                                                        */
