@@ -193,7 +193,7 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 /*****************************************************************************/
 /* Configuration - Constants                                                   */
 /*****************************************************************************/
-const int mode = TEST_MODE_MYO;
+const int mode = TEST_MODE_BOARD;
 
 /*****************************************************************************/
 /* Configuration - BLE                                                        */
@@ -203,9 +203,11 @@ const int mode = TEST_MODE_MYO;
 
 
 /*****************************************************************************/
-/* Configuration - WIFI                                                         */
+/* Configuration - WIFI                                                      */
 /*****************************************************************************/
-#define SSID                "MASMOVIL_Ry5F"
-#define PASSWORD            "Fx3up9dqPk2C"
+//#define SSID                "MIWIFI_6gJX"
+//#define PASSWORD            "pFh47rtH"
+//#define HOST                "esp32"
+
 
 #endif

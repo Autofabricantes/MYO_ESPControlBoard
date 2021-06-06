@@ -1,6 +1,6 @@
 #include "MyoUtils.h" 
 
-uint8_t MyoUtils::emg[8];
+uint8_t MyoUtils::emg[16];
 
 /********************************************************************************************************
     CONNECT/DISCONNECT
