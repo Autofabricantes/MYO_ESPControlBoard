@@ -1,5 +1,7 @@
 #include <Arduino.h>
-//#include <TimedAction.h>
+
+// Threading
+#include <pthread.h>
 
 // My libraries
 #include "Constants.h"
@@ -18,8 +20,8 @@ WebServer server(80);
 const char* host = "esp32";
 const char* ssid = "MIWIFI_6gJX";
 const char* password = "pFh47rtH";
-//TimedAction timedAction = TimedAction(1000,runServer);
 
+pthread_t webServerThread;
 
 int counter = 0;
 InputOutputUtils inputOutputUtils;
@@ -109,6 +111,19 @@ const char* serverIndex =
  "});"
  "</script>";
 
+// void *printThreadId(void *threadid) {
+//    Serial.println((int)threadid);
+// }
+
+void *runServer(void * threadId){
+
+  while (true){
+
+    log_i("Running thread.");
+    server.handleClient();
+    delay(1000);
+  }
+}
 
 void setup() {
 
@@ -116,7 +131,7 @@ void setup() {
   Serial.begin(115200);                            
   log_i(">> Setup.......");
 
-  // OTA Settings
+  /********************** OTA Settings *************************/
   
   // Connect to WiFi network
   WiFi.begin(ssid, password);
@@ -177,7 +192,19 @@ void setup() {
   });
   server.begin();
 
-  // Start control board
+  /********************** Threads settings *********************/
+
+  log_i("Init thread");
+  int i = 1;
+  int returnValue = pthread_create(&webServerThread, NULL, runServer, (void*)i);
+ 
+  if (returnValue) {
+    log_e("An error has occurred.");
+  }else{
+    log_e("Thread successfully created.");
+  }
+
+  /**************************** Myo settings ************************************************/
   if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS  || mode == TEST_MODE_MYO){
 	    inputOutputUtils.initIO();
   }else if(mode ==  TEST_MODE_BOARD){
@@ -191,12 +218,10 @@ void setup() {
 void loop() {
 
   counter++;
-  server.handleClient();
+  //server.handleClient();
 
   log_i("Into the loop %i", counter);
   log_i("Execution mode :%i", mode);
-
-  //timedAction.check();
 
   inputOutputUtils.myoUtils.detectDisconnect();
 
@@ -210,8 +235,4 @@ void loop() {
   vTaskDelay(1000);
   //delay(1000);
   
-}
-
-void runServer(){
-    server.handleClient();
 }
