@@ -205,9 +205,8 @@ const int mode = TEST_MODE_BOARD;
 /*****************************************************************************/
 /* Configuration - WIFI                                                      */
 /*****************************************************************************/
-//#define SSID                "MIWIFI_6gJX"
-//#define PASSWORD            "pFh47rtH"
-//#define HOST                "esp32"
-
+#define MYO_SSID                "MIWIFI_6gJX"
+#define MYO_PASSWORD            "pFh47rtH"
+#define MYO_HOST                "esp32"
 
 #endif
