@@ -10,7 +10,7 @@ static const char *  loginIndex =
         "<table width='20%' bgcolor='A09F9F' align='center'>"
         "<tr>"
             "<td colspan=2>"
-                "<center><font size=4><b>ESP32 Login Page</b></font></center>"
+                "<center><font size=4><b>ESP32 Login Page Changed</b></font></center>"
                 "<br>"
             "</td>"
             "<br>"
@@ -90,9 +90,9 @@ void * MyoOTA::runServer(void * threadId){
 
   while (true){
 
-    log_i("Running thread.");
+    //log_i("Running thread.");
     server.handleClient();
-    delay(1000);
+    delay(1);
   }
 }
 
@@ -101,27 +101,25 @@ void MyoOTA::startOTA(){
   
   // Connect to WiFi network
   WiFi.begin(MYO_SSID, MYO_PASSWORD);
-  Serial.println("");
+  log_i("");
 
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(MYO_SSID);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+  
+  log_i("Connected to %s", MYO_SSID);
+  log_i("IP address: %s", WiFi.localIP());
 
   /*use mdns for host name resolution*/
   if (!MDNS.begin(MYO_HOST)) { //http://esp32.local
-    Serial.println("Error setting up MDNS responder!");
+    log_i("Error setting up MDNS responder!");
     while (1) {
       delay(1000);
     }
   }
-  Serial.println("mDNS responder started");
+  log_i("mDNS responder started");
   
   /*return index page which is stored in serverIndex */
   server.on("/", HTTP_GET, []() {
@@ -160,16 +158,8 @@ void MyoOTA::startOTA(){
   });
   server.begin();
 
+}
 
-  // Run the webserver in a thread
-  log_i("Init thread");
-  int i = 1;
-  int returnValue = pthread_create(&webServerThread, NULL, runServer, (void*)i);
- 
-  if (returnValue) {
-    log_e("An error has occurred.");
-  }else{
-    log_e("Thread successfully created.");
-  }
-
+void MyoOTA::handleClient(){
+  server.handleClient();
 }

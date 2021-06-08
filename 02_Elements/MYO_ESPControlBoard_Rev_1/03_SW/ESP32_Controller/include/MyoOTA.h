@@ -19,6 +19,7 @@ class MyoOTA {
 	public:
 	
 		void startOTA();
+		void handleClient();
 		
 	private:
 

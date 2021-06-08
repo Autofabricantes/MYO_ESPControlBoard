@@ -98,8 +98,6 @@ void MyoUtils::emgCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, ui
 	log_d(">> emgCallback");
 	log_d("EMG: \t");
 
-	log_e("Longitid: %d", length);
-
 	for (int i = 0; i < length; i++) {
 		MyoUtils::emg[i] = pData[i];
 		log_d("%d", pData[i]);
