@@ -40,6 +40,8 @@ class InputOutputUtils{
     // Reset INPUT/OUTPUT elements
     void resetIO();
 
+    void connectMyo();
+
 	// Identifies the state selected by user from input elements feedback
     // An interpretation and treatment of readed data from sensors will be  
 	// needed to perform the required transition to get the selected state 
@@ -73,11 +75,6 @@ class InputOutputUtils{
 
 	// Finger control methods
 	void fingerControl(int motorId, int motorDir, int controlId);
-
-    // Testing functions for Myo testing purposes
-    void getMyoTransitionTesting();
-    void getMyoSerialTesting();
-
 
 };
 

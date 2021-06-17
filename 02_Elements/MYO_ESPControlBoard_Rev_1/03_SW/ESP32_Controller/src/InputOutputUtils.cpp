@@ -13,8 +13,6 @@ void InputOutputUtils::initIO() {
 
 	stateMachine.start();
 
-	myoUtils.connect();
-
 	// Initialize switch pinout
 	pinMode(PIN_SW_0, INPUT);
 
@@ -33,10 +31,15 @@ void InputOutputUtils::initIO() {
 	initPotValue(PIN_MPOT_0);
 	initPotValue(PIN_MPOT_1);
 
+}
+
+void InputOutputUtils::connectMyo(){
+
 	//Myo connection
-	//myoUtils.connect();
+	myoUtils.connect();
 
 }
+
 
 // Posiblemente pueda reutilizar INIT pero mantenemos esta por si necesito activar solo algunos elementos.
 void InputOutputUtils::resetIO() {
@@ -63,9 +66,9 @@ void InputOutputUtils::executeTransition() {
 	int transtionToPerform = TRANSITION_TO_NOTHING;
 
 	if (mode == TEST_MODE_TRANSITIONS)
-		inputTransition = test->getKeyboardTransition();
+		inputTransition = test->getKeyboardStateToGet();
 	else
-		inputTransition = myoUtils.getMyoTransition();
+		inputTransition = myoUtils.getMyoStateToGet();
 
 	transtionToPerform = stateMachine.getTransitionToPerform(inputTransition);
 
@@ -176,19 +179,4 @@ void InputOutputUtils::motorControl(int motorID, int motorDir, int motorSpeed) {
 	}
 
 	log_i("<< motorControl");
-}
-
-
-
-  void InputOutputUtils::getMyoTransitionTesting(){
-
-	myoUtils.getMyoTransition();
-	
-}
-
-
-  void InputOutputUtils::getMyoSerialTesting(){
-
-	myoUtils.getMyoSerial();
-
 }

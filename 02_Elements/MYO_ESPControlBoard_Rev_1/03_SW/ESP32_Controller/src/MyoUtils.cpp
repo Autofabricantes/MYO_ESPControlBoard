@@ -136,44 +136,54 @@ void MyoUtils::gestureCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic
 }
 
 /********************************************************************************************************
-    TRANSITIONS
+    EMG
  ********************************************************************************************************/
 
-int MyoUtils::getMyoTransition(){
+// Convertimos la señal EMG en un estado (OPEN/CLOSE)
+int MyoUtils::getMyoStateToGet(){
 
-    int transition = 0;       
+	int state = CLOSE;       
        
     //log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
-    //       MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7], 
-	//	   MyoUtils::emg[8], MyoUtils::emg[9], MyoUtils::emg[10], MyoUtils::emg[11], MyoUtils::emg[12], MyoUtils::emg[13], MyoUtils::emg[14], MyoUtils::emg[15]);        
-    
-	Serial.print(MyoUtils::emg[0]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[1]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[2]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[3]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[4]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[5]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[6]);
-	Serial.print(",");
-	Serial.print(MyoUtils::emg[7]);
+    //MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7], 
+	//MyoUtils::emg[8], MyoUtils::emg[9], MyoUtils::emg[10], MyoUtils::emg[11], MyoUtils::emg[12], MyoUtils::emg[13], MyoUtils::emg[14], MyoUtils::emg[15]);     
+        
+    int meanEmg = (MyoUtils::emg[0] + MyoUtils::emg[1] + MyoUtils::emg[2] + MyoUtils::emg[3] +  MyoUtils::emg[4] + MyoUtils::emg[5] + MyoUtils::emg[6] + MyoUtils::emg[7])/8;
+        
+	if (meanEmg > 300){
+		state = OPEN;
+	}
 
-    return transition;
+	log_i("State to get: %d", state);
+
+    return state;
 
 }
 
 
-void MyoUtils::getMyoSerial(){
+// Salida con fines de ploteo
+void MyoUtils::getMyoEMG(){
 
 	do{
 
     	log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
-           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);      
+           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);     
+
+		Serial.print(MyoUtils::emg[0]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[1]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[2]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[3]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[4]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[5]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[6]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[7]); 
 
 		vTaskDelay(1000);
 		//delay(1000);

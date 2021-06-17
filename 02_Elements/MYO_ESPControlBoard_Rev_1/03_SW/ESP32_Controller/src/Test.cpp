@@ -24,7 +24,7 @@ void Test::setIoUtils(InputOutputUtils * ioUtilsClass){
 }
 
 
-int Test::getKeyboardTransition(){
+int Test::getKeyboardStateToGet(){
 	int transition = 0;
 	
 	log_i("Transition to: ");
@@ -57,11 +57,6 @@ void Test::testingBoard(){
 	log_i(" (5) Get potentiometer thumb value");
 	
 	log_i(" (6) Switch");
-
-	log_i(" (7) Get myo transition");
-	log_i(" (8) Get myo samples/serial plot");
-
-	log_i("(9) EXIT");
 
 	// send data only when you receive data
 	while(!Serial.available());
@@ -102,20 +97,12 @@ void Test::testingBoard(){
 			switchLedRGB();
 		break;
 
-		case 7: 
-			ioUtils->getMyoTransitionTesting();
-		return; 
-
-		case 8: 
-			ioUtils->getMyoSerialTesting();
-		return; 
-
-		case 9: 
 		default:
 		return; 
 	}
 
 }
+
 
 void Test::switchLedRGB(){
 

@@ -180,20 +180,26 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 /* Configuration - FUNCTION MODE                                             */
 /*****************************************************************************/
 
-// Buttons control to test and initialize
-#define TEST_MODE_TRANSITIONS   0
-#define TEST_MODE_BOARD         1
-#define TEST_MODE_MYO           2
+// Pruebas unitarias con los difernetes elementos de la placa
+#define TEST_MODE_BOARD            0
 
-//Myo operative control
-#define OPERATION_MODE          3
+// Ploteo de la MYO (requiere conexión al brazalete)
+#define TEST_MODE_MYO_EMG_OUTPUT    1
 
+// Detección de estados con la MYO (requiere conexión al brazalete)
+#define TEST_MODE_MYO_STATES       2
+
+// Dentro del flujo de operación normal transcionamos con el teclado
+#define TEST_MODE_TRANSITIONS      3
+
+//Myo operative control (requiere conexión al brazalete)
+#define OPERATION_MODE             4
 
 
 /*****************************************************************************/
 /* Configuration - Constants                                                   */
 /*****************************************************************************/
-const int mode = TEST_MODE_BOARD;
+const int mode = TEST_MODE_TRANSITIONS;
 
 /*****************************************************************************/
 /* Configuration - BLE                                                        */

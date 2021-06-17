@@ -39,13 +39,27 @@ void handleMyo(void * pvParameters){
     log_i("Into the loop %i", counter);
     log_i("Execution mode :%i", mode);
      
-    inputOutputUtils.myoUtils.detectDisconnect();
-    if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS)
-      inputOutputUtils.executeTransition();
-    else if(mode == TEST_MODE_MYO)
-      inputOutputUtils.myoUtils.getMyoTransition();
-    else if(mode == TEST_MODE_BOARD)
+    if(mode == TEST_MODE_BOARD){
+
       tester.testingBoard();
+
+    }else if(mode == TEST_MODE_TRANSITIONS){
+      inputOutputUtils.executeTransition();
+
+    }else{
+
+      inputOutputUtils.myoUtils.detectDisconnect();
+
+      if(mode == TEST_MODE_MYO_STATES){
+        inputOutputUtils.myoUtils.getMyoStateToGet();
+      }else if(mode == TEST_MODE_MYO_EMG_OUTPUT){
+        inputOutputUtils.myoUtils.getMyoEMG();
+      }else if(mode == OPERATION_MODE){
+        inputOutputUtils.executeTransition();
+      }      
+    } 
+
+    delay(5000);
   }
 }
 
@@ -54,16 +68,20 @@ void setup() {
   // Start serial interface for debugging
   Serial.begin(115200);       
 
-  log_i(">> Setup updated.......");
+  log_i(">> Setup ...");
 
   // Start OTA
   myoOTA.startOTA();
 
   // Myo execution mode
-  if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS  || mode == TEST_MODE_MYO){
+  if(mode == TEST_MODE_MYO_EMG_OUTPUT || mode == TEST_MODE_MYO_STATES  || mode == OPERATION_MODE){
 	    inputOutputUtils.initIO();
-  }else if(mode ==  TEST_MODE_BOARD){
+      inputOutputUtils.connectMyo();
+  }else if(mode ==  TEST_MODE_BOARD || TEST_MODE_TRANSITIONS){
       inputOutputUtils.initIO();
+  }
+
+  if(TEST_MODE_BOARD){
       tester.setIoUtils(&inputOutputUtils);
   }
 
@@ -81,10 +99,10 @@ void setup() {
   
   xTaskCreatePinnedToCore(
                     handleMyo,   /* Task function. */
-                    "Task2",     /* name of task. */
+                    "Task1",     /* name of task. */
                     10000,       /* Stack size of task */
                     NULL,        /* parameter of the task */
-                    1,           /* priority of the task */
+                    2,           /* priority of the task */
                     &task2Myo,   /* Task handle to keep track of created task */
                     1);          /* pin task to core 1 */
     delay(500); 
@@ -92,28 +110,6 @@ void setup() {
 }
 
 
-
-
 void loop() {
 
-  // counter++;
-  
-  // log_i("Into the loop %i", counter);
-  // log_i("Execution mode :%i", mode);
-
-  //log_i("Running thread.");
-  // myoOTA.handleClient();
-
-  // inputOutputUtils.myoUtils.detectDisconnect();
-
-  // if(mode == OPERATION_MODE || mode == TEST_MODE_TRANSITIONS)
-  //   inputOutputUtils.executeTransition();
-  // else if(mode == TEST_MODE_MYO)
-  //   inputOutputUtils.myoUtils.getMyoTransition();
-  // else if(mode == TEST_MODE_BOARD)
-  //   tester.testingBoard();
-
-  //vTaskDelay(1000);
-  //delay(1000);
-  
 }

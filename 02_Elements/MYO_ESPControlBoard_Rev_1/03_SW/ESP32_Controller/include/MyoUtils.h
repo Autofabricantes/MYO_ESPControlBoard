@@ -3,6 +3,7 @@
 
 // Myo Armbrand libraries
 #include <myo.h>
+#include "Constants.h"
 
 class MyoUtils {
         
@@ -14,12 +15,12 @@ class MyoUtils {
 		// EMG data storage
 		static uint8_t emg[16];
 		
-		int getMyoTransition();
+		int getMyoStateToGet();
 
         void detectDisconnect();
         void connect();
 
-        void getMyoSerial();
+        void getMyoEMG();
 
 		
 	private:

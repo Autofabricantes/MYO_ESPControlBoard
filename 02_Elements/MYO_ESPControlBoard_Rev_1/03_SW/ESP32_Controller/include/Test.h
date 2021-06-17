@@ -17,7 +17,7 @@ class Test{
 
   public:
     void setIoUtils(InputOutputUtils * ioUtilsClass);
-	  int  getKeyboardTransition();
+	  int  getKeyboardStateToGet();
     void testingBoard();
 
 };
