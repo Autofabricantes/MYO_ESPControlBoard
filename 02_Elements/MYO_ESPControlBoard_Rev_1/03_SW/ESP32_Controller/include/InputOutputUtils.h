@@ -74,7 +74,7 @@ class InputOutputUtils{
     int  getPotValue(int potId);
 
 	// Finger control methods
-	void fingerControl(int motorId, int motorDir, int controlId);
+	void fingerControl(int finger, int state);
 
 };
 

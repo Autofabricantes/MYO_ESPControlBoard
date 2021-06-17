@@ -70,19 +70,19 @@ void Test::testingBoard(){
 	switch(option){
 
 		case 0:
-			ioUtils->fingerControl(THUMB, CLOSE, PIN_MPOT_0);
+			ioUtils->fingerControl(THUMB, CLOSE);
 		break;
 
 		case 1: 
-			ioUtils->fingerControl(THUMB, OPEN, PIN_MPOT_0);
+			ioUtils->fingerControl(THUMB, OPEN);
 		break;
 
 		case 2:
-			ioUtils->fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
+			ioUtils->fingerControl(FOREFINGER, CLOSE);
 		break;
 
 		case 3: 
-			ioUtils->fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+			ioUtils->fingerControl(FOREFINGER, OPEN);
 		break;
 
 		case 4:

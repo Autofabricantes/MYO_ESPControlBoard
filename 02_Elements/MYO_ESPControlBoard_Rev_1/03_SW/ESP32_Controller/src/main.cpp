@@ -68,10 +68,10 @@ void setup() {
   // Start serial interface for debugging
   Serial.begin(115200);       
 
-  log_i(">> Setup ...");
+  log_i(">> Setup custom1");
 
   // Start OTA
-  myoOTA.startOTA();
+  // myoOTA.startOTA();
 
   // Myo execution mode
   if(mode == TEST_MODE_MYO_EMG_OUTPUT || mode == TEST_MODE_MYO_STATES  || mode == OPERATION_MODE){
@@ -86,16 +86,16 @@ void setup() {
   }
 
   // Handle Myo
-  xTaskCreatePinnedToCore(
-                    handleWebServer, /* Task function. */
-                    "Task1",         /* name of task. */
-                    10000,           /* Stack size of task */
-                    NULL,            /* parameter of the task */
-                    1,               /* priority of the task */
-                    &task1OTA,       /* Task handle to keep track of created task */
-                    0);              /* pin task to core 0 */                  
+  // xTaskCreatePinnedToCore(
+  //                   handleWebServer, /* Task function. */
+  //                   "Task1",         /* name of task. */
+  //                   10000,           /* Stack size of task */
+  //                   NULL,            /* parameter of the task */
+  //                   1,               /* priority of the task */
+  //                   &task1OTA,       /* Task handle to keep track of created task */
+  //                   0);              /* pin task to core 0 */                  
 
-  delay(500); 
+  // delay(500); 
   
   xTaskCreatePinnedToCore(
                     handleMyo,   /* Task function. */

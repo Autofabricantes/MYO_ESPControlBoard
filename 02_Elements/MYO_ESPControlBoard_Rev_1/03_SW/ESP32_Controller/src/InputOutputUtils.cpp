@@ -93,8 +93,8 @@ void InputOutputUtils::transitionToInactive(){
 	log_i(">> transitionToInactive");
 
 	// Open thumb + Open forefinger
-	fingerControl(THUMB, OPEN, PIN_MPOT_0);	
-	fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+	fingerControl(THUMB, OPEN);	
+	fingerControl(FOREFINGER, OPEN);
 }
 
 void InputOutputUtils::transitionToIdle(){
@@ -102,8 +102,8 @@ void InputOutputUtils::transitionToIdle(){
 	log_i("transitionToIdle");
 	
 	// Open thumb + Open forefinger
-	fingerControl(THUMB, OPEN, PIN_MPOT_0);
-	fingerControl(FOREFINGER, OPEN, PIN_MPOT_1);
+	fingerControl(THUMB, OPEN);
+	fingerControl(FOREFINGER, OPEN);
 }
 
 void InputOutputUtils::transitionToTongs(){
@@ -111,8 +111,8 @@ void InputOutputUtils::transitionToTongs(){
 	log_i(">> transitionToTongs");
 
 	// Close thumb + Close forefinger
-	fingerControl(THUMB, CLOSE, PIN_MPOT_0);
-	fingerControl(FOREFINGER, CLOSE, PIN_MPOT_1);
+	fingerControl(THUMB, CLOSE);
+	fingerControl(FOREFINGER, CLOSE);
 
 }
 
@@ -141,26 +141,29 @@ int InputOutputUtils::getForefingerPosition() {
 /******************************************************************************/
 void InputOutputUtils::initPotValue(int potId){
 
-	// TODO: Reseto de pots. ¿Aplicamos una pos relativa?
+	// TODO: Reseto de pots (¿posición relativa?)
 	log_i(">> initPotValue(%i)", potId);
 
 }
 
 int InputOutputUtils::getPotValue(int potId){
 
-	// TODO: Lectura de pots (posición relativa?)
+	// TODO: Lectura de pots (¿posición relativa?)
 	log_i(">> getPotValue(%i)", potId);
 	return 0;
 
 }
 
-void InputOutputUtils::fingerControl(int motor, int motorDir, int pot){
+void InputOutputUtils::fingerControl(int finger, int state){
 
-	log_i(">> fingerControl(%i, %i, %i)", motor, motorDir, pot);
+	log_i(">> fingerControl(%i, %i)", finger, state);
 
-	// TODO
-	// Control PID. Lectura de pot.
-	// TODO: Control de los motores (llamada a motorControl).
+	// OPEN/CLOSE --> motorDir
+	// THUMB --> PIN_MPOT_0  ¿PIN_MOT_A_0 PIN_MOT_A_1?
+	// FOREFINGER --> PIN_MPOT_1 ¿PIN_MOT_B_0 PIN_MOT_B_1?
+
+	// Control PID - Lectura de potenciometro - getPotValue()
+	// Llamada a motorControl(...)
 
 }
 
