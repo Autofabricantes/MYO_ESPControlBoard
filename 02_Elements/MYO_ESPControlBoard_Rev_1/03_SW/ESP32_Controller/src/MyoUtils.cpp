@@ -144,11 +144,11 @@ int MyoUtils::getMyoStateToGet(){
 
 	int state = CLOSE;       
        
-    //log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
-    //MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7], 
-	//MyoUtils::emg[8], MyoUtils::emg[9], MyoUtils::emg[10], MyoUtils::emg[11], MyoUtils::emg[12], MyoUtils::emg[13], MyoUtils::emg[14], MyoUtils::emg[15]);     
+    log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d]", 
+           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);     
         
     int meanEmg = (MyoUtils::emg[0] + MyoUtils::emg[1] + MyoUtils::emg[2] + MyoUtils::emg[3] +  MyoUtils::emg[4] + MyoUtils::emg[5] + MyoUtils::emg[6] + MyoUtils::emg[7])/8;
+	log_i("Value: %i", meanEmg);
         
 	if (meanEmg > 300){
 		state = OPEN;
