@@ -42,6 +42,13 @@ void setup() {
   pinMode(pMOT_A_1,   OUTPUT);
   pinMode(pMOT_B_1,   OUTPUT);
   pinMode(pSW_0,      INPUT);
+  digitalWrite(pMOT_EN_0,  LOW);
+  digitalWrite(pMOT_A_0,  LOW);
+  digitalWrite(pMOT_B_0,  LOW);
+  digitalWrite(pMOT_EN_1,  LOW);
+  digitalWrite(pMOT_A_1,  LOW);
+  digitalWrite(pMOT_B_1,  LOW);
+
 }
 
 void loop() {
