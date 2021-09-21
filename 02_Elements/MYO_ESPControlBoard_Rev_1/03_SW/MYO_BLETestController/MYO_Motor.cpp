@@ -17,13 +17,13 @@ MYO_Motor::MYO_Motor(int pinEn,int pinA, int pinB, int pinPot, int pinSen)
   _pinPot = pinPot;
   _pinSen = pinSen;
   _setSpeed = MOTORSPEED_DEFAULT;
-  _currentPosition = map(analogRead(pinPot),0,1024,POSITION_MIN,POSITION_MAX);
+  _currentPosition = map(analogRead(pinPot),0,4095,POSITION_MIN,POSITION_MAX);
   _tolerance = TOLERANCE_DEFAULT;
   _delay = DELAY_DEFAULT;
 }
 
 int MYO_Motor::getPosition(){
-  _currentPosition = map(analogRead(_pinPot),0,1024,POSITION_MIN,POSITION_MAX);
+  _currentPosition = map(analogRead(_pinPot),0,4095,POSITION_MIN,POSITION_MAX);
   return _currentPosition;
 }
 
@@ -64,7 +64,7 @@ void MYO_Motor::goToPosition(int aimedPosition){
   while(!inPosition(aimedPosition)){
     setDirection(aimedPosition);
     setEnable();
-    delay(_delay);
+    //delay(_delay);
   }
   stopHalt();
 }
@@ -77,18 +77,18 @@ bool MYO_Motor::setEnable(){
 
 bool MYO_Motor::setDirection(int aimedPosition){
   if(aimedPosition > _currentPosition){
-    digitalWrite(_pinA, HIGH);
-    digitalWrite(_pinB, LOW);
-    return true;
-  }else{
     digitalWrite(_pinA, LOW);
     digitalWrite(_pinB, HIGH);
+    return true;
+  }else{
+    digitalWrite(_pinA, HIGH);
+    digitalWrite(_pinB, LOW);
     return false;
   }
 }
 
 bool MYO_Motor::inPosition(int aimedPosition){
-   _currentPosition = map(analogRead(_pinPot),0,1024,POSITION_MIN,POSITION_MAX);
+   _currentPosition = map(analogRead(_pinPot),0,4095,POSITION_MIN,POSITION_MAX);
   if((_currentPosition <= (aimedPosition - _tolerance)) || (_currentPosition >= (aimedPosition + _tolerance))){
     return false;
   }else{

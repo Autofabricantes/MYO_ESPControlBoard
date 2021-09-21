@@ -57,63 +57,39 @@ void readSerialCommand(){
 };
 
 void setup() {
-
-  MOT_0.stopLiberate();
-  MOT_1.stopLiberate();
   LED.init();
-  // LED Initialization
-  for(int i = 0; i < 21; i++){
-    LED.setColor(i);
-    delay(500);
-  }
-
-  for(int i = 0; i < 19; i++){
-    LED.blinkColor(i,500);
-  }
-
-  for(int i = 0; i < 19; i++){
-    LED.fadeColor(i,i+1,500);
-  }
-
-  for(int i = 0; i < 19; i++){
-    LED.fadeandOffColor(i,i+1,500);
-    delay(500);
-  }
-
-
+  LED.setColor(1);
+  MOT_0.stopLiberate();
+  MOT_1.stopLiberate();
   
-
-  MOT_0.stopLiberate();
-  MOT_1.stopLiberate();
-
-  delay(2000);
-
-  MOT_0.setDirection(0);
-  MOT_1.setDirection(100);
-  MOT_0.setEnable();
-  MOT_1.setEnable();
-
-  delay(2000);
-
-  MOT_0.setDirection(0);
-  MOT_1.setDirection(100);
-  MOT_0.setEnable();
-  MOT_1.setEnable();
-
-  delay(2000);
-
-  MOT_0.stopLiberate();
-  MOT_1.stopLiberate();
-
   Serial.begin(9600); 
   SerialBT.begin("MYO_ATF"); //Bluetooth device name
   Serial.println("Waiting a client connection to notify...");
+  
+  MOT_0.goToPosition(80);
+  MOT_1.goToPosition(20);
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  delay(200);
-  SerialBT.print("Looking good girl!\n");
+  delay(2000);
+
+  MOT_0.goToPosition(80);
+  MOT_1.goToPosition(20);
+  SerialBT.print("\nMotor Potentionmeters TEST MOT 0:");
+  SerialBT.print(MOT_0.getPosition());
+  SerialBT.print("\nMotor Potentionmeters TEST MOT 1:");
+  SerialBT.print(MOT_1.getPosition());
+
+  delay(2000);
+
+  MOT_0.goToPosition(20);
+  MOT_1.goToPosition(80);
+  SerialBT.print("\nMotor Potentionmeters TEST MOT 0:");
+  SerialBT.print(MOT_0.getPosition());
+  SerialBT.print("\nMotor Potentionmeters TEST MOT 1:");
+  SerialBT.print(MOT_1.getPosition());
   readSerialCommand();
   
 }
