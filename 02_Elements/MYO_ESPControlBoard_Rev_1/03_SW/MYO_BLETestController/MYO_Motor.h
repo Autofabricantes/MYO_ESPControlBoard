@@ -5,16 +5,16 @@
 #include "Arduino.h"
 
 // Constant Definition
-#define MOTORSPEED_DEFAULT  50
+#define MOTORSPEED_DEFAULT  40
 #define MOTORSPEED_MIN      0
 #define MOTORSPEED_MAX      100
 
-#define TOLERANCE_DEFAULT  5
-#define TOLERANCE_MIN      0
-#define TOLERANCE_MAX      100
+#define TOLERANCE_DEFAULT   10
+#define TOLERANCE_MIN       0
+#define TOLERANCE_MAX       100
 
-#define DELAY_DEFAULT       20
-#define DELAY_MIN           5
+#define DELAY_DEFAULT       1
+#define DELAY_MIN           1
 #define DELAY_MAX           100
 
 #define POSITION_MIN        0
@@ -44,9 +44,10 @@ class MYO_Motor
     int _pinPot;
     int _pinSen;
     int _currentPosition;
-    int _setSpeed;
+    int _speed;
     int _tolerance;
     int _delay;
+    int _pwmCh;
 };
 
 #endif
