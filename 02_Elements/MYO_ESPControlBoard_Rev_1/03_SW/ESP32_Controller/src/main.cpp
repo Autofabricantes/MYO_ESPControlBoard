@@ -12,6 +12,8 @@ InputOutputUtils inputOutputUtils;
 Test tester;
 MyoOTA myoOTA;
 
+// Ejecución del Webserver para la carga del .bin
+// http://192.168.1.135/
 void handleWebServer(){
 
   log_i("OTA Web Server running (Port %d)", xPortGetCoreID());
@@ -40,6 +42,7 @@ void setup() {
   // handleWebServer();
 
   // Setting  execution mode
+  log_i("Execution mode: %i", mode);
   if(mode == TEST_MODE_MYO_EMG_OUTPUT || mode == TEST_MODE_MYO_STATES  || mode == OPERATION_MODE){
 	    inputOutputUtils.initIO();
       inputOutputUtils.connectMyo();
@@ -50,18 +53,13 @@ void setup() {
       tester.setIoUtils(&inputOutputUtils);
   }
 
-  
 }
 
 void loop() {
 
-  log_i("Myo running...", xPortGetCoreID());
-
   counter++;
+  log_i("Myo running (loop %i)", counter);
   
-  log_i("Into the loop %i", counter);
-  log_i("Execution mode :%i", mode);
-
   if(mode == TEST_MODE_BOARD){
     tester.testingBoard();
   }else if(mode == TEST_MODE_TRANSITIONS){
@@ -78,7 +76,7 @@ void loop() {
       inputOutputUtils.executeTransition();
     }      
   } 
-  
+
   vTaskDelay(5000);
 
 }

@@ -45,6 +45,7 @@ int Test::getKeyboardStateToGet(){
 	return transition;
 }
 
+// Testeo de los elementos de la placa de manera individual mediante el menú
 void Test::testingBoard(){
 
 	log_i("Testing board: ");
@@ -56,12 +57,12 @@ void Test::testingBoard(){
 	log_i(" (4) Get potentiometer thumb value");
 	log_i(" (5) Get potentiometer thumb value");
 	
-	log_i(" (6) Switch");
+	log_i(" (6) Switch led");
 
-	// send data only when you receive data
+	// Send data only when you receive data
 	while(!Serial.available());
 
-	// read the incoming byte
+	// Read the incoming byte
 	int option = Serial.parseInt();
 	Serial.flush();
 
