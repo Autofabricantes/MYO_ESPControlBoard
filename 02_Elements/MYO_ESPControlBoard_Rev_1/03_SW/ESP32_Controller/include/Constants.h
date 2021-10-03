@@ -195,7 +195,7 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 /*****************************************************************************/
 /* Configuration - Constants                                                   */
 /*****************************************************************************/
-const int mode = TEST_MODE_TRANSITIONS;
+const int mode = OPERATION_MODE;
 
 /*****************************************************************************/
 /* Configuration - BLE                                                        */
