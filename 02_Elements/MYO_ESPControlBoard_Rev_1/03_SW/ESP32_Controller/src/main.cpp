@@ -22,11 +22,10 @@ void handleWebServer(void * pvParameters){
 
   for(;;){
     myoOTA.handleClient();
-    delay(1000);
+    vTaskDelay(100);
   }
 
 }
-
 
 void handleMyo(void * pvParameters){
 
@@ -59,7 +58,7 @@ void handleMyo(void * pvParameters){
       }      
     } 
 
-    delay(5000);
+    vTaskDelay(1000);
   }
 }
 
@@ -71,7 +70,8 @@ void setup() {
   log_i(">> Setup custom1");
 
   // Start OTA
-  // myoOTA.startOTA();
+  // ACTIVATE OTA
+  myoOTA.startOTA();
 
   // Myo execution mode
   if(mode == TEST_MODE_MYO_EMG_OUTPUT || mode == TEST_MODE_MYO_STATES  || mode == OPERATION_MODE){
@@ -86,30 +86,30 @@ void setup() {
   }
 
   // Handle Myo
-  // xTaskCreatePinnedToCore(
-  //                   handleWebServer, /* Task function. */
-  //                   "Task1",         /* name of task. */
-  //                   10000,           /* Stack size of task */
-  //                   NULL,            /* parameter of the task */
-  //                   1,               /* priority of the task */
-  //                   &task1OTA,       /* Task handle to keep track of created task */
-  //                   0);              /* pin task to core 0 */                  
+  // ACTIVATE OTA
+  xTaskCreatePinnedToCore(
+                  handleWebServer, /* Task function. */
+                  "Task1",         /* name of task. */
+                  10000,           /* Stack size of task */
+                  NULL,            /* parameter of the task */
+                  1,               /* priority of the task */
+                  &task1OTA,       /* Task handle to keep track of created task */
+                  0);              /* pin task to core 0 */                  
 
-  // delay(500); 
+  vTaskDelay(1000);
   
   xTaskCreatePinnedToCore(
-                    handleMyo,   /* Task function. */
-                    "Task1",     /* name of task. */
-                    10000,       /* Stack size of task */
-                    NULL,        /* parameter of the task */
-                    2,           /* priority of the task */
-                    &task2Myo,   /* Task handle to keep track of created task */
-                    1);          /* pin task to core 1 */
-    delay(500); 
+                  handleMyo,   /* Task function. */
+                  "Task2",     /* name of task. */
+                  10000,       /* Stack size of task */
+                  NULL,        /* parameter of the task */
+                  2,           /* priority of the task */
+                  &task2Myo,   /* Task handle to keep track of created task */
+                  1);          /* pin task to core 1 */
+  vTaskDelay(1000);
 
 }
 
-
-void loop() {
-
-}
+//void loop() {
+//
+//}

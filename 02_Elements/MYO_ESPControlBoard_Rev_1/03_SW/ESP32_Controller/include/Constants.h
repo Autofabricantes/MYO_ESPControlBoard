@@ -92,12 +92,8 @@ const int FINGER_POSITION_MATRIX[STATES_NUMBER][FINGERS] = {
 /*************************************************************************/
 /* MOTORS/FINGERS                                                        */
 /*************************************************************************/
-// TODO: Límites de velocidad de los motores
 
-// RASPY
-//MOTOR_CTRL_MIN = 0  
-//MOTOR_CTRL_MAX = 4096 
-
+// ¿TODO?: Límites de velocidad de los motores
 // ARDUINO
 // Min Value for motors speed
 #define MOTOR_SPEED_MIN   0
@@ -181,7 +177,7 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 /*****************************************************************************/
 
 // Pruebas unitarias con los difernetes elementos de la placa
-#define TEST_MODE_BOARD            0
+#define TEST_MODE_BOARD             0
 
 // Ploteo de la MYO (requiere conexión al brazalete)
 #define TEST_MODE_MYO_EMG_OUTPUT    1
@@ -189,7 +185,7 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 // Detección de estados con la MYO (requiere conexión al brazalete)
 #define TEST_MODE_MYO_STATES       2
 
-// Dentro del flujo de operación normal transcionamos con el teclado
+// Dentro del flujo de operación normal, transcionamos con el teclado
 #define TEST_MODE_TRANSITIONS      3
 
 //Myo operative control (requiere conexión al brazalete)
@@ -199,7 +195,7 @@ const int MOTOR_CONTROL_MATRIX[FINGERS][2] = {
 /*****************************************************************************/
 /* Configuration - Constants                                                   */
 /*****************************************************************************/
-const int mode = OPERATION_MODE;
+const int mode = TEST_MODE_TRANSITIONS;
 
 /*****************************************************************************/
 /* Configuration - BLE                                                        */
