@@ -1,0 +1,58 @@
+Partlist
+
+Exported from MYO_ESPControlBoard_Rev_1.brd at 13/10/2021 14:16
+
+EAGLE Version 7.6.0 Copyright (c) 1988-2016 CadSoft
+
+Assembly variant: 
+
+Part      Value                                            Package                        Library                           Position (mm)         Orientation
+
+C_AS_0    22nF                                             C0805K                         adafruit                          (58.5 9.5)            R0
+C_AS_1    22nF                                             C0805K                         adafruit                          (26 43)               R90
+-C_DR_0    100uF                                            C0805K                         adafruit                          (58.5 6.5)            R0
+-C_DR_1    100uF                                            C0805K                         adafruit                          (29 43)               R90
+-C_ESP_1   100uF                                            C0805K                         adafruit                          (28.5 24)             MR180
+-C_ESP_2   100uF                                            C0805K                         adafruit                          (33.5 24)             MR180
+-C_ESP_3   470pF                                            C0805K                         adafruit                          (28.5 21)             MR180
+-C_VR_0    330nF                                            C0805                          adafruit                          (11 13)               MR90
+-C_VR_1    100nF                                            C0805                          adafruit                          (11 17.5)             MR270
+-C_VR_2    330nF                                            C0805                          adafruit                          (26.5 10.5)           MR90
+-C_VR_3    100nF                                            C0805                          adafruit                          (26.5 15.5)           MR270
+-D2        MBRA140                                          SMA-DIODE                      SparkFun-DiscreteSemi             (15.5 7.5)            MR0
+-D3        MBRA140                                          SMA-DIODE                      SparkFun-DiscreteSemi             (22.5 7.5)            MR180
+J_PW                                                       JST-2-SMD                      SparkFun                          (6 6)                 MR225
+-LED_PW                                                     1206                           adafruit                          (4 26)                MR180
+L_RGB_0                                                    WS2812B                        SparkFun-LED                      (4 28)                R0
+-MOTPOT_0  POLOLU_MOT_POT                                   POLOLU_MOT_POT                 PololuMotors                      (53.5 5.5)            MR180
+-MOTPOT_1  POLOLU_MOT_POT                                   POLOLU_MOT_POT                 PololuMotors                      (30 38)               MR90
+-Q_JTAG_0                                                   SOT23-3                        SparkFun                          (14 28.5)             R0
+-Q_JTAG_1                                                   SOT23-3                        SparkFun                          (14 20.5)             R180
+-R_AS_0    4k7Ohm                                           M0805                          adafruit                          (48.5 6.5)            R0
+-R_AS_1    4k7Ohm                                           M0805                          adafruit                          (29 33)               R90
+-R_AXL_0   12KOhm                                           M0805                          adafruit                          (50.5 23.5)           R180
+-R_AXL_SCL 470Ohm                                           M0805                          adafruit                          (50.5 26.5)           R180
+-R_AXL_SDA 470Ohm                                           M0805                          adafruit                          (50.5 29.5)           R0
+R_ESP0    5KOhm                                            M0805                          adafruit                          (32 29)               MR180
+MAS-R_ESP2    12KOhm                                           M0805                          adafruit                          (55.5 23.5)           R180
+-R_ESP4    12KOhm                                           M0805                          adafruit                          (33.5 21)             MR0
+-R_JTAG_0  12KOhm                                           M0805                          adafruit                          (14 24.5)             R90
+-R_JTAG_1  12KOhm                                           M0805                          adafruit                          (10 19.5)             R0
+R_POT_0   ???                                              M0805                          adafruit                          (59 3)                R90
+R_POT_1   ???                                              M0805                          adafruit                          (32.5 43.5)           R180
+R_PW      330Ohm                                           M0805                          adafruit                          (3.5 29)              MR180
+R_SHUNT_0 0.039Ohm                                         M0805                          adafruit                          (48.5 9.5)            R180
+R_SHUNT_1 0.039Ohm                                         M0805                          adafruit                          (26 33)               R270
+-R_SW_0    10kOhm                                           M0805                          adafruit                          (8.5 8.5)             R315
+-R_TX      470Ohm                                           M0805                          adafruit                          (10 29.5)             R180
+-SW_00     SWITCH-MOMENTARY-2TACTILE-SWITCH-SMD-RIGHT-ANGLE TACTILE_SWITCH-SMD-RIGHT-ANGLE SparkFun-Electromechanical        (6 6)                 R135
+-SW_PW     TL36YO                                           TL3XYO                         switch                            (4 18)                MR90
+-U_AS_0    ZXCT1022E5TA                                     SOT95P270X145-5N(SOT23-5)      ZXCT1022E5TA                      (53.5 8)              R90
+-U_AS_1    ZXCT1022E5TA                                     SOT95P270X145-5N(SOT23-5)      ZXCT1022E5TA                      (27.5 38)             R180
+-U_AXL     ADXL345                                          LGA14                          SparkFun                          (56.5 27.5)           R180
+U_DR_0    VNH7100ASTR                                      SOIC127P600X175-16N            VNH7100ASTR                       (53.5 16.5)           R180
+U_DR_1    VNH7100ASTR                                      SOIC127P600X175-16N            VNH7100ASTR                       (19 38)               R270
+-U_ESP     ESP-WROOM-03                                     ESP-WROOM-03                   esp32                             (27 16.5)             R0
+-U_VR_0    MC78GENERICDT                                    DPAK-3                         _hhn_78xx_79xx_NCV78xx_d2pak_dpak (21.5 13.5)           MR90
+-U_VR_1    UA78M33DCY                                       SOT223                         linear                            (32.5 13)             MR90
+X2        332-06                                           332-06                         con-garry                         (10 24.5)             R270

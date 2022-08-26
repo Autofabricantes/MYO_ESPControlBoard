@@ -22,7 +22,7 @@
 
 #define MOT_EN_1    5   // GPIO 5
 #define MOT_A_1     25  // GPIO 25
-#define MOT_B_1     14  // GPIO 14
+#define MOT_B_1     13  // GPIO 13 // GPIO14 in BRD. Changed due to Initial PWM Signal during BOOT
 #define MPOT_1      32  // GPIO 32
 #define MSEN_1      34  // GPIO 34
 
@@ -70,8 +70,8 @@ void setup() {
   LED.setColor(CYAN_LOW);
   MOT_0.stopLiberate();
   MOT_1.stopLiberate();
-  MOT_0.goToPosition(15);
-  MOT_1.goToPosition(15);
+  MOT_0.goToPosition(5);
+  MOT_1.goToPosition(5);
   
   Serial.begin(9600); 
   SerialBT.begin("MYO_ATF"); //Bluetooth device name
@@ -97,12 +97,12 @@ void readCommandForMotorPosition(String serialMessage){
           SerialBT.print("Motor A to position: ");
           SerialBT.println(aimedPosition);
           LED.fadeColor(BLUE_LOW, BLUE_HIGH, 500);
-          MOT_0.goToPosition(map(aimedPosition, 0, 100, 15, 85));
+          MOT_0.goToPosition(map(aimedPosition, 0, 100, 5, 95));
         }else{
           SerialBT.print("Motor B to position: ");
           SerialBT.println(aimedPosition);
           LED.fadeColor(BLUE_LOW, BLUE_HIGH, 500);
-          MOT_1.goToPosition(map(aimedPosition, 0, 100, 15, 85));
+          MOT_1.goToPosition(map(aimedPosition, 0, 100, 5, 95));
         }
   }else{
     SerialBT.print("Serial Message Incorrect: ");

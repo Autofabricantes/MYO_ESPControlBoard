@@ -69,7 +69,9 @@ int MYO_Motor::setDelay(int aimedDelay){
 }
 
 void MYO_Motor::goToPosition(int aimedPosition){
-  while(!inPosition(aimedPosition)){
+  int iterator = 0;
+  while(!inPosition(aimedPosition) && (iterator < 800)){
+    iterator++;
     setDirection(aimedPosition);
     setEnable();
     delay(_delay);
