@@ -72,7 +72,7 @@ void InputOutputUtils::executeTransition() {
 
 	transtionToPerform = stateMachine.getTransitionToPerform(inputTransition);
 
-	log_i(">> executeTransition - transtion readed: %i", transtionToPerform);
+	log_i(">> executeTransition: %i", transtionToPerform);
 
     if(transtionToPerform == TRANSITION_TO_INACTIVE)
         transitionToInactive();

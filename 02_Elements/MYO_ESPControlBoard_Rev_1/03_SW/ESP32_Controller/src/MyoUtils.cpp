@@ -1,6 +1,6 @@
 #include "MyoUtils.h" 
 
-uint8_t MyoUtils::emg[16];
+uint8_t MyoUtils::emg[8];
 
 /********************************************************************************************************
     CONNECT/DISCONNECT
@@ -21,15 +21,12 @@ void MyoUtils::connect(){
 					 myohw_imu_mode_send_data,        // IMU mode
                      myohw_classifier_mode_enabled);  // Classifier mode
 
+	myo.emg_notification(TURN_ON)->registerForNotify(emgCallback);
 
-	//for (int i = 0; i < 16; i++) {
-	//	MyoUtils::emg[i] = 0;
-	//}
-
+		
 	//myo.battery_notification(TURN_ON)->registerForNotify(batteryCallback);
 	//myo.imu_notification(TURN_ON)->registerForNotify(imuCallback);
 	//myo.gesture_notification(TURN_ON)->registerForNotify((gestureCallback);
-	myo.emg_notification(TURN_ON)->registerForNotify(emgCallback);
 
 	// short vibration
 	myo.vibration(myohw_vibration_short);
@@ -62,37 +59,20 @@ void MyoUtils::detectDisconnect(){
                      myohw_imu_mode_send_data,              // IMU mode
                      myohw_classifier_mode_enabled);        // Classifier mode
 
+	myo.emg_notification(TURN_ON)->registerForNotify(emgCallback);
+
 	//myo.battery_notification(TURN_ON)->registerForNotify(batteryCallback);
 	//myo.imu_notification(TURN_ON)->registerForNotify(imuCallback);
 	//myo.gesture_notification(TURN_ON)->registerForNotify(gestureCallback);
-	myo.emg_notification(TURN_ON)->registerForNotify(emgCallback);
   }
 
 }
 
 /********************************************************************************************************
-    SET CALLBACKS WHEN RECEIVING DATA
+    EMG
  ********************************************************************************************************/
 
-void MyoUtils::batteryCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
-
-	log_i(">> batteryCallback");
-
-	myo.battery = pData[0];
-	log_i("Battery: %d", myo.battery);
-	
-}
-
-void MyoUtils::imuCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
-
-	log_d(">> imuCallback");
-
-	log_d("IMU: \t");
-	for (int i = 0; i < length; i++) {
-		log_d("%d", pData[i]);
-	}
-}
-
+// Callback EMG
 void MyoUtils::emgCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 
 	log_d(">> emgCallback");
@@ -104,6 +84,87 @@ void MyoUtils::emgCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, ui
 	}	
 }
 
+// Detección de estados (OPEN/CLOSE)
+int MyoUtils::getMyoStateToGet(){
+
+	int state = CLOSE;       
+       
+    log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d]", 
+           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);     
+        
+    int meanEmg = (MyoUtils::emg[0] + MyoUtils::emg[1] + MyoUtils::emg[2] + MyoUtils::emg[3] +  MyoUtils::emg[4] + MyoUtils::emg[5] + MyoUtils::emg[6] + MyoUtils::emg[7])/8;
+	log_i("Value: %i", meanEmg);
+        
+	if (meanEmg > 300){
+		state = OPEN;
+	}
+
+	log_i("State to get: %d", state);
+
+    return state;
+
+}
+
+
+// Testeo de la señal mediante la salida del purto serie.
+void MyoUtils::getMyoEMG(){
+
+	do{
+
+    	//log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d]", 
+        //MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);     
+
+		Serial.print(MyoUtils::emg[0]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[1]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[2]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[3]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[4]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[5]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[6]);
+		Serial.print(",");
+		Serial.print(MyoUtils::emg[7]); 
+
+		vTaskDelay(1000);
+		//delay(1000);
+
+	}while(true);
+
+}
+
+
+/********************************************************************************************************
+    OTROS CALLBACKS
+ ********************************************************************************************************/
+
+// Callback carga batería (deshabilitado)
+void MyoUtils::batteryCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
+
+	log_i(">> batteryCallback");
+
+	myo.battery = pData[0];
+	log_i("Battery: %d", myo.battery);
+	
+}
+
+// Callback IMU (deshabilitado)
+void MyoUtils::imuCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
+
+	log_d(">> imuCallback");
+
+	log_d("IMU: \t");
+	for (int i = 0; i < length; i++) {
+		log_d("%d", pData[i]);
+	}
+}
+
+
+// Callback detección de gestos (deshabilitdo)
 void MyoUtils::gestureCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
 	
 	// Print the gesture
@@ -135,62 +196,6 @@ void MyoUtils::gestureCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic
   }
 }
 
-/********************************************************************************************************
-    EMG
- ********************************************************************************************************/
-
-// Convertimos la señal EMG en un estado (OPEN/CLOSE)
-int MyoUtils::getMyoStateToGet(){
-
-	int state = CLOSE;       
-       
-    log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d]", 
-           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);     
-        
-    int meanEmg = (MyoUtils::emg[0] + MyoUtils::emg[1] + MyoUtils::emg[2] + MyoUtils::emg[3] +  MyoUtils::emg[4] + MyoUtils::emg[5] + MyoUtils::emg[6] + MyoUtils::emg[7])/8;
-	log_i("Value: %i", meanEmg);
-        
-	if (meanEmg > 300){
-		state = OPEN;
-	}
-
-	log_i("State to get: %d", state);
-
-    return state;
-
-}
-
-
-// Salida con fines de ploteo
-void MyoUtils::getMyoEMG(){
-
-	do{
-
-    	log_i("EMG: [%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d]", 
-           MyoUtils::emg[0], MyoUtils::emg[1], MyoUtils::emg[2],  MyoUtils::emg[3],  MyoUtils::emg[4],  MyoUtils::emg[5], MyoUtils::emg[6], MyoUtils::emg[7]);     
-
-		Serial.print(MyoUtils::emg[0]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[1]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[2]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[3]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[4]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[5]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[6]);
-		Serial.print(",");
-		Serial.print(MyoUtils::emg[7]); 
-
-		vTaskDelay(1000);
-		//delay(1000);
-
-	}while(true);
-
-}
 
 
                     
